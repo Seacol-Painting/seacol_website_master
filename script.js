@@ -37,28 +37,23 @@ document.querySelectorAll('[data-comparison]').forEach(box=>{
   update();
 });
 
-let lang='en';
-const toggle=document.querySelector('#lang-toggle');
-function applyLanguage(next){
-  lang=next;
-  document.documentElement.lang=lang;
-  document.querySelectorAll('[data-en][data-es]').forEach(el=>{
-    const value=el.dataset[lang];
-    if(el.tagName==='OPTION')el.textContent=value;
-    else el.innerHTML=value;
-  });
-  toggle.textContent=lang==='en'?'ES':'EN';
-  localStorage.setItem('seacol-lang',lang);
-}
-toggle.addEventListener('click',()=>applyLanguage(lang==='en'?'es':'en'));
-applyLanguage(localStorage.getItem('seacol-lang')||'en');
+document.documentElement.lang='en';
+const year=document.querySelector('#year');
+if(year) year.textContent=new Date().getFullYear();
 
-document.querySelector('#year').textContent=new Date().getFullYear();
-document.querySelector('#estimate-form').addEventListener('submit',e=>{
-  e.preventDefault();
-  const d=new FormData(e.currentTarget);
-  const lines=lang==='es'?
-    [`Hola SEACOL, quisiera solicitar un estimado gratis.`,`Nombre: ${d.get('name')}`,`Ciudad: ${d.get('city')}`,`Proyecto: ${d.get('project')}`,`Propiedad: ${d.get('property')}`,`Detalles: ${d.get('details')}`]:
-    [`Hello SEACOL, I would like to request a free estimate.`,`Name: ${d.get('name')}`,`City: ${d.get('city')}`,`Project: ${d.get('project')}`,`Property: ${d.get('property')}`,`Details: ${d.get('details')}`];
-  window.location.href=`sms:+12065732474?&body=${encodeURIComponent(lines.join('\n'))}`;
-});
+const estimateForm=document.querySelector('#estimate-form');
+if(estimateForm){
+  estimateForm.addEventListener('submit',e=>{
+    e.preventDefault();
+    const d=new FormData(e.currentTarget);
+    const lines=[
+      'Hello SEACOL, I would like to request a free estimate.',
+      `Name: ${d.get('name')}`,
+      `City: ${d.get('city')}`,
+      `Project: ${d.get('project')}`,
+      `Property: ${d.get('property')}`,
+      `Details: ${d.get('details')}`
+    ];
+    window.location.href=`sms:+12065732474?&body=${encodeURIComponent(lines.join('\n'))}`;
+  });
+}
