@@ -46,26 +46,23 @@
   .site-header #site-nav.open{opacity:1;visibility:visible;pointer-events:auto;clip-path:circle(145vmax at calc(100% - 38px) 36px);transition:clip-path .84s cubic-bezier(.76,0,.24,1),opacity .2s ease,visibility 0s}
 
   .site-header #site-nav>a:not(.nav-cta){
-    position:relative;display:flex;align-items:center;min-height:66px;padding:8px 46px 8px 8px;
+    position:relative;display:flex;align-items:center;min-height:66px;padding:8px;
     border-bottom:1px solid rgba(255,255,255,.11);font-family:Georgia,"Times New Roman",serif;
     font-size:clamp(32px,9.5vw,46px);font-weight:500;line-height:1;color:#fff;letter-spacing:-.025em;
     opacity:0;transform:translateX(34px);transition:opacity .38s ease,transform .5s cubic-bezier(.2,.8,.2,1),color .25s ease,padding-left .25s ease
   }
-  .site-header #site-nav>a:not(.nav-cta):after{content:"→";position:absolute;right:8px;color:rgba(226,189,105,.55);font-family:Inter,sans-serif;font-size:19px;transition:transform .25s ease,color .25s ease}
   .site-header #site-nav>a:not(.nav-cta):active{color:var(--gold2);padding-left:16px}
-  .site-header #site-nav>a:not(.nav-cta):active:after{transform:translateX(5px);color:var(--gold2)}
 
   .site-header #site-nav.open>a:nth-child(1){transition-delay:.15s}.site-header #site-nav.open>a:nth-child(2){transition-delay:.21s}
   .site-header #site-nav.open>a:nth-child(3){transition-delay:.27s}.site-header #site-nav.open>a:nth-child(4){transition-delay:.33s}
   .site-header #site-nav.open>a:not(.nav-cta){opacity:1;transform:translateX(0)}
 
   .site-header #site-nav .nav-cta{
-    order:5;display:flex;align-items:center;justify-content:space-between;width:100%;margin-top:24px;padding:17px 20px;
+    order:5;display:flex;align-items:center;justify-content:center;width:100%;margin-top:24px;padding:17px 20px;
     border:1px solid rgba(226,189,105,.72);border-radius:18px;background:linear-gradient(110deg,rgba(226,189,105,.98),rgba(198,154,68,.92));
     color:#071827;font-size:14px;font-weight:850;letter-spacing:.025em;opacity:0;transform:translateY(20px);
     box-shadow:0 18px 48px rgba(0,0,0,.22);transition:opacity .35s ease .4s,transform .5s cubic-bezier(.2,.8,.2,1) .4s
   }
-  .site-header #site-nav .nav-cta:after{content:"↗";font-size:19px}
   .site-header #site-nav.open .nav-cta{opacity:1;transform:translateY(0)}
 
   .site-header.menu-active .brand{position:relative;z-index:304}.site-header.menu-active .brand small{color:rgba(226,189,105,.82)}
