@@ -28,7 +28,3 @@ Static, responsive website prepared for `seacolpaintingllc.com`.
 - Add contractor license and legal business details when available.
 - Add testimonials and additional exterior/interior/deck project photos.
 - Confirm final service wording and business hours.
-
-## Deployment status
-- GitHub repository connected to Vercel on 2026-09-29.
-- This commit is a deployment trigger to verify automatic GitHub → Vercel production builds.
