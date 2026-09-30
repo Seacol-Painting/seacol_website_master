@@ -1,32 +1,30 @@
-# SEACOL Fine Painting — Luxury Redesign
+# SEACOL Fine Painting — Website V1
 
-This repository contains a static rebuild of the SEACOL Fine Painting website prepared for deployment on Vercel.
+Static, responsive website prepared for `seacolpaintingllc.com`.
 
 ## Included
+- English / Spanish language switch
+- Responsive premium design
+- Real project photographs, optimized as WebP
+- Before/after slider
+- Residential and commercial services
+- Estimate form that prepares a text message to (206) 573-2474
+- Privacy policy
+- Local business structured data
 
-- `index.html` — responsive landing page with services, projects, process, contact form and bilingual EN/ES toggle
-- `styles.css` — premium responsive styling
-- `script.js` — mobile navigation, before/after slider, language toggle and SMS estimate handoff
-- `privacy.html` — simple privacy policy
-- `assets/` — optimized SEACOL project images and logo assets
-- `vercel.json` — static deployment configuration
+## Publish on Vercel
+1. Unzip the folder.
+2. Upload the folder to a new GitHub repository, or drag it into Vercel if your dashboard offers direct upload.
+3. In Vercel, create a new project from the repository.
+4. Framework preset: **Other**.
+5. Build command: leave empty.
+6. Output directory: leave empty.
+7. Deploy.
+8. Add `seacolpaintingllc.com` and `www.seacolpaintingllc.com` in Project Settings → Domains.
 
-## Local preview
-
-Open `index.html` in a browser or serve the folder with any static server.
-
-## Vercel
-
-Recommended production settings:
-
-- Framework preset: Other
-- Root directory: repository root
-- Build command: none
-- Output directory: none
-
-## Pending
-
-- Connect `seacolpaintingllc.com` after production preview is approved
-- Add Google Maps embed once Google Business Profile location details are finalized
-- Expand portfolio as more SEACOL project photos are curated
-- Reconnect final business email CTA once Microsoft 365 mailbox is fully configured
+## Pending before final launch
+- Replace provisional logo if a final vector logo is approved.
+- Add the corporate email after Microsoft 365 is configured.
+- Add contractor license and legal business details when available.
+- Add testimonials and additional exterior/interior/deck project photos.
+- Confirm final service wording and business hours.
