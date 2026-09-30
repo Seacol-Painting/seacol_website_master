@@ -1,0 +1,54 @@
+name: Sync website assets
+
+on:
+  push:
+    paths:
+      - '.github/workflows/sync-assets.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Download production assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p assets
+          base="https://seacolpaintingllc.com/assets"
+          files=(
+            after-kitchen.webp
+            before-kitchen.webp
+            builtins.webp
+            commercial-after.webp
+            commercial-before.webp
+            commercial-studio.webp
+            favicon.png
+            hero-kitchen.webp
+            logo-mark.png
+            navy-vanity.webp
+            spray-process.webp
+            two-tone-kitchen.webp
+          )
+          for file in "${files[@]}"; do
+            curl --fail --location --retry 3 "$base/$file" --output "assets/$file"
+          done
+
+      - name: Commit synced assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets
+          if git diff --cached --quiet; then
+            echo "Assets already match production."
+            exit 0
+          fi
+          git commit -m "Sync SEACOL production assets"
+          git push
