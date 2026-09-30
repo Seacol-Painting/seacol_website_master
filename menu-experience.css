@@ -1,0 +1,97 @@
+/* SEACOL immersive mobile menu — intentionally isolated from the original site design */
+@media (max-width:850px){
+  body.menu-open{overflow:hidden;touch-action:none}
+  .site-header{z-index:300;transition:background .35s ease,box-shadow .35s ease}
+  .site-header.menu-active{background:transparent;box-shadow:none}
+  .nav-wrap{position:relative;z-index:302}
+
+  .menu-button{
+    position:relative;display:grid;place-items:center;width:48px;height:48px;padding:0;
+    border:1px solid rgba(226,189,105,.48);border-radius:50%;font-size:0;
+    background:radial-gradient(circle at 35% 25%,rgba(226,189,105,.16),rgba(255,255,255,.025) 44%,rgba(5,20,34,.52) 100%);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 8px 26px rgba(0,0,0,.18);
+    backdrop-filter:blur(12px);transition:transform .35s cubic-bezier(.2,.8,.2,1),border-color .3s ease,background .3s ease;
+    z-index:304
+  }
+  .menu-button:before,.menu-button:after{
+    content:"";position:absolute;width:19px;height:1.5px;border-radius:2px;background:var(--gold2);
+    transition:transform .38s cubic-bezier(.2,.8,.2,1),top .38s cubic-bezier(.2,.8,.2,1),width .3s ease
+  }
+  .menu-button:before{top:19px}.menu-button:after{top:27px;width:13px;right:14px}
+  .menu-button[aria-expanded="true"]{transform:rotate(90deg);border-color:rgba(226,189,105,.82);background:rgba(8,26,43,.7)}
+  .menu-button[aria-expanded="true"]:before{top:23px;transform:rotate(45deg);width:19px}
+  .menu-button[aria-expanded="true"]:after{top:23px;right:auto;transform:rotate(-45deg);width:19px}
+
+  .site-header #site-nav{
+    position:fixed!important;inset:0!important;top:0!important;width:100vw;height:100dvh;
+    display:flex!important;flex-direction:column;align-items:stretch;justify-content:center;gap:0;
+    padding:112px 26px 94px;background:
+      linear-gradient(135deg,rgba(5,20,34,.985) 0%,rgba(7,26,43,.955) 42%,rgba(7,22,36,.91) 100%),
+      radial-gradient(circle at 86% 15%,rgba(226,189,105,.24),transparent 28%),
+      url('assets/hero-kitchen.webp') center/cover no-repeat;
+    overflow:hidden;opacity:0;visibility:hidden;pointer-events:none;
+    clip-path:circle(0 at calc(100% - 38px) 36px);
+    transition:clip-path .78s cubic-bezier(.76,0,.24,1),opacity .24s ease,visibility 0s linear .78s;
+    border:0!important;box-shadow:none!important;z-index:301
+  }
+  .site-header #site-nav:before{
+    content:"SEACOL";position:absolute;left:-10px;bottom:50px;font-family:Georgia,"Times New Roman",serif;
+    font-size:clamp(86px,29vw,145px);line-height:.75;letter-spacing:-.055em;color:rgba(255,255,255,.035);
+    transform:rotate(-4deg);pointer-events:none
+  }
+  .site-header #site-nav:after{
+    content:"FINE PAINTING  •  SEATTLE & KING COUNTY";position:absolute;left:28px;bottom:30px;
+    color:rgba(226,189,105,.68);font-size:8px;font-weight:700;letter-spacing:.25em;white-space:nowrap
+  }
+  .site-header #site-nav.open{opacity:1;visibility:visible;pointer-events:auto;clip-path:circle(145vmax at calc(100% - 38px) 36px);transition:clip-path .84s cubic-bezier(.76,0,.24,1),opacity .2s ease,visibility 0s}
+
+  .site-header #site-nav>a:not(.nav-cta){
+    position:relative;display:flex;align-items:center;min-height:66px;padding:8px 8px 8px 47px;
+    border-bottom:1px solid rgba(255,255,255,.11);font-family:Georgia,"Times New Roman",serif;
+    font-size:clamp(32px,9.5vw,46px);font-weight:500;line-height:1;color:#fff;letter-spacing:-.025em;
+    opacity:0;transform:translateX(34px);transition:opacity .38s ease,transform .5s cubic-bezier(.2,.8,.2,1),color .25s ease,padding-left .25s ease
+  }
+  .site-header #site-nav>a:not(.nav-cta):before{
+    position:absolute;left:5px;top:50%;transform:translateY(-50%);font-family:Inter,system-ui,sans-serif;
+    color:var(--gold2);font-size:9px;font-weight:800;letter-spacing:.14em
+  }
+  .site-header #site-nav>a:nth-child(1):before{content:"01"}.site-header #site-nav>a:nth-child(2):before{content:"02"}
+  .site-header #site-nav>a:nth-child(3):before{content:"03"}.site-header #site-nav>a:nth-child(4):before{content:"04"}
+  .site-header #site-nav>a:not(.nav-cta):after{content:"→";position:absolute;right:8px;color:rgba(226,189,105,.55);font-family:Inter,sans-serif;font-size:19px;transition:transform .25s ease,color .25s ease}
+  .site-header #site-nav>a:not(.nav-cta):active{color:var(--gold2);padding-left:55px}
+  .site-header #site-nav>a:not(.nav-cta):active:after{transform:translateX(5px);color:var(--gold2)}
+
+  .site-header #site-nav.open>a:nth-child(1){transition-delay:.15s}.site-header #site-nav.open>a:nth-child(2){transition-delay:.21s}
+  .site-header #site-nav.open>a:nth-child(3){transition-delay:.27s}.site-header #site-nav.open>a:nth-child(4){transition-delay:.33s}
+  .site-header #site-nav.open>a:not(.nav-cta){opacity:1;transform:translateX(0)}
+
+  .site-header #site-nav .nav-cta{
+    order:5;display:flex;align-items:center;justify-content:space-between;width:100%;margin-top:24px;padding:17px 20px;
+    border:1px solid rgba(226,189,105,.72);border-radius:18px;background:linear-gradient(110deg,rgba(226,189,105,.98),rgba(198,154,68,.92));
+    color:#071827;font-size:14px;font-weight:850;letter-spacing:.025em;opacity:0;transform:translateY(20px);
+    box-shadow:0 18px 48px rgba(0,0,0,.22);transition:opacity .35s ease .4s,transform .5s cubic-bezier(.2,.8,.2,1) .4s
+  }
+  .site-header #site-nav .nav-cta:after{content:"↗";font-size:19px}
+  .site-header #site-nav.open .nav-cta{opacity:1;transform:translateY(0)}
+
+  .site-header #site-nav .lang-button{
+    order:6;align-self:flex-start;margin-top:18px;padding:9px 14px;border:1px solid rgba(255,255,255,.16)!important;border-radius:999px;
+    color:rgba(255,255,255,.78);font-size:11px;font-weight:800;letter-spacing:.16em;background:rgba(255,255,255,.035);
+    opacity:0;transform:translateY(12px);transition:opacity .3s ease .48s,transform .4s ease .48s
+  }
+  .site-header #site-nav.open .lang-button{opacity:1;transform:translateY(0)}
+
+  .site-header.menu-active .brand{position:relative;z-index:304}.site-header.menu-active .brand small{color:rgba(226,189,105,.82)}
+}
+
+@media (max-width:390px){
+  .site-header #site-nav{padding:96px 20px 84px}
+  .site-header #site-nav>a:not(.nav-cta){min-height:59px;font-size:31px;padding-left:43px}
+  .site-header #site-nav .nav-cta{margin-top:18px;padding:14px 17px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  @media (max-width:850px){
+    .site-header #site-nav,.site-header #site-nav.open,.site-header #site-nav>a:not(.nav-cta),.site-header #site-nav .nav-cta,.site-header #site-nav .lang-button,.menu-button,.menu-button:before,.menu-button:after{transition-duration:.01ms!important;transition-delay:0s!important}
+  }
+}
