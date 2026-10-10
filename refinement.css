@@ -1,0 +1,75 @@
+/* Preview refinement of the approved SEACOL design. Original photos are unchanged. */
+:root{--shadow:0 18px 48px rgba(8,26,43,.10);--radius:14px}
+html{scroll-padding-top:108px}
+body{-webkit-font-smoothing:antialiased}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid #997631;outline-offset:5px}
+.site-header.scrolled{box-shadow:0 8px 24px rgba(3,17,30,.10);border-bottom:1px solid rgba(226,189,105,.12)}
+.site-header nav{gap:30px;font-size:13px;letter-spacing:.025em}
+.site-header nav a{transition:opacity .2s ease,color .2s ease}
+.nav-cta{border-color:rgba(226,189,105,.65)}
+.eyebrow{letter-spacing:.23em;font-weight:650}
+.section h2,.category-hero h1,.gallery-hero h1{font-weight:400;text-wrap:balance}
+.section-heading>p{max-width:38em;line-height:1.75}
+.button{font-weight:650;letter-spacing:.02em;transition:background-color .25s ease,box-shadow .25s ease,transform .25s ease}
+.button-gold{background:linear-gradient(135deg,#e3c782,#cba451);box-shadow:0 6px 18px rgba(198,154,68,.14)}
+.button:hover{transform:translateY(-1px)}
+.hero h1{font-weight:400;letter-spacing:-.025em;line-height:1.06}
+.hero-copy{line-height:1.7;max-width:34em}
+.trust-row{font-size:12px;letter-spacing:.025em}
+#about .about-photo,#process .process-photo{border-radius:14px;box-shadow:0 16px 44px rgba(8,26,43,.12)}
+#about .about-promises{gap:22px}
+#about .about-promises h3{font-weight:600}
+#about .about-lead{line-height:1.8}
+#about .about-details summary{min-height:44px;display:list-item;align-content:center}
+.service-grid{gap:16px;border:0}
+.service-grid .service-photo{border:1px solid rgba(8,26,43,.10);border-radius:12px;min-height:240px;padding:30px;box-shadow:none;transition:box-shadow .3s ease,border-color .3s ease}
+.service-grid .service-photo h3{font-weight:400;font-size:28px;line-height:1.2;max-width:11em;text-wrap:balance}
+.service-grid .service-photo::before{background:linear-gradient(180deg,rgba(251,250,247,.58),rgba(251,250,247,.86))}
+.service-grid .service-background{transition:transform .7s ease}
+.service-grid .service-photo:hover{transform:none;background:#fbfaf7;box-shadow:0 12px 30px rgba(8,26,43,.10);border-color:rgba(134,105,47,.4)}
+.project-card,.gallery-hub-card,.ba-project,.project-photo-grid figure{border-radius:14px;border-color:rgba(8,26,43,.10);box-shadow:0 8px 28px rgba(8,26,43,.045)}
+.project-card-body{padding:28px 28px 30px}
+.project-card h3{line-height:1.15}
+.project-card p{line-height:1.75}
+.view-gallery-link{font-size:10px;font-weight:650;letter-spacing:.11em}
+.project-card:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(8,26,43,.10)}
+.ba-copy{padding:28px}
+.ba-copy h2{font-weight:400;line-height:1.2}
+.ba-copy p{line-height:1.65}
+.project-photo-grid{gap:30px}
+.project-photo-grid figcaption{padding:20px 24px;font-size:22px;line-height:1.3}
+.gallery-subnav{gap:10px}
+.gallery-subnav a{transition:background-color .2s ease,color .2s ease}
+.comparison:after{width:44px;height:44px;font-size:20px;box-shadow:0 3px 14px rgba(8,26,43,.17)}
+.comparison:focus-within{outline:3px solid #c69a44;outline-offset:3px}
+footer{border-top:1px solid rgba(226,189,105,.16)}
+@media(min-width:851px){
+ .section{padding:112px 0}
+ .section-heading{gap:76px;margin-bottom:48px}
+ .hero h1{font-size:clamp(56px,6.4vw,88px)}
+ .hero-copy{font-size:19px}
+ .trust-row{gap:26px;margin-top:36px}
+ #about .about-layout{gap:76px}
+ .category-hero,.gallery-hero{padding-bottom:72px}
+}
+@media(hover:hover) and (prefers-reduced-motion:no-preference){
+ .service-grid .service-photo:hover .service-background{transform:scale(1.025)}
+}
+@media(max-width:850px){
+ html{scroll-padding-top:88px}
+ .section{padding:64px 0}
+ .site-header nav{gap:22px}
+ .service-grid{gap:12px}
+ .service-grid .service-photo{padding:24px 14px;min-height:170px}
+ .service-grid .service-photo h3{font-size:23px}
+ .project-card-body,.ba-copy{padding:24px}
+ .project-photo-grid{gap:22px}
+ .project-photo-grid figcaption{padding:18px 20px;font-size:21px}
+ .comparison:after{width:40px;height:40px}
+}
+@media(max-width:380px){.service-grid .service-photo{min-height:180px}}
+@media(prefers-reduced-motion:reduce){
+ html{scroll-behavior:auto}
+ *,*::before,*::after{transition:none!important;animation:none!important}
+ .project-card:hover,.button:hover,.service-grid .service-photo:hover .service-background{transform:none}
+}
