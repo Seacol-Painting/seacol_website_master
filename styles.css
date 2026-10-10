@@ -38,7 +38,7 @@
 .service-gallery-link::after{content:"";position:absolute;inset:0;z-index:1}
 .service-gallery-link:focus-visible{outline:none}
 .service-grid article.service-photo:focus-within{outline:3px solid #86692f;outline-offset:3px;z-index:2}
-.service-grid .service-gallery-hint{display:flex;align-items:center;gap:10px;margin-top:18px;color:#69501f;font-size:12px;font-weight:750;letter-spacing:.04em}
-.service-gallery-hint span{transition:transform .2s ease}
-.service-photo:hover .service-gallery-hint span,.service-photo:focus-within .service-gallery-hint span{transform:translateX(4px)}
-@media(prefers-reduced-motion:reduce){.service-gallery-hint span{transition:none}}
+
+/* Keep service titles centered over the photographs. */
+.service-grid article.service-photo{display:flex;align-items:center;justify-content:center;text-align:center}
+.service-grid article.service-photo h3{margin:0}
