@@ -1,0 +1,117 @@
+/* Mobile-only presentation. Desktop rules and content remain unchanged. */
+@media (max-width:850px){
+  html{scroll-padding-top:88px}
+  body{padding-bottom:calc(78px + env(safe-area-inset-bottom,0px))}
+  main{overflow-x:clip}
+  .container{width:calc(100% - 36px);max-width:680px}
+  .section{padding:58px 0}
+  .section h2{font-size:clamp(29px,7.6vw,42px);line-height:1.13;letter-spacing:-.018em;word-spacing:normal;text-wrap:balance}
+  .eyebrow{font-size:10px;letter-spacing:.18em;margin-bottom:14px}
+  .section-heading,.split,.estimate-grid{gap:22px}
+  .section-heading{margin-bottom:28px}
+  .section-heading p,.intro .split>div:last-child,.estimate-grid>div>p:not(.eyebrow){font-size:16px;line-height:1.7}
+  .intro .split>div:last-child{padding-top:0}
+  .intro p:first-child{margin-top:0}
+  .intro p{margin-bottom:20px}
+  .text-link{min-height:44px;display:inline-flex;align-items:center;margin-top:0}
+  .nav-wrap{height:70px}
+  body .brand{gap:9px}
+  body .brand img{width:34px;height:44px}
+  .brand strong{font-size:21px;letter-spacing:.15em}
+  .brand small{font-size:8px;letter-spacing:.22em}
+  .hero{height:auto;min-height:0;align-items:flex-end;background:#081a2b}
+  .hero-image{object-position:58% center;opacity:.85}
+  .hero-overlay{background:linear-gradient(180deg,rgba(4,17,29,.2) 0%,rgba(4,17,29,.52) 22%,rgba(4,17,29,.93) 70%,#081a2b 100%)}
+  .hero-content{padding-top:166px;padding-bottom:38px}
+  .hero h1{font-size:clamp(35px,9.4vw,56px);line-height:1.08;letter-spacing:-.025em;word-spacing:normal;max-width:600px;margin-bottom:20px;text-wrap:balance}
+  .hero-copy{font-size:16px;line-height:1.65;max-width:36em;margin-bottom:24px;color:#e1e5e8}
+  .hero-actions .button{width:100%;min-height:52px;border-radius:14px;font-size:15px}
+  .trust-row{margin-top:24px;gap:8px;font-size:12px;line-height:1.5}
+  .button{min-height:48px;padding:13px 18px}
+  .service-grid{border:0;gap:12px;grid-template-columns:1fr 1fr}
+  .service-grid article{padding:20px 17px;min-height:0;border:1px solid var(--line);border-radius:14px;background:#fff}
+  .service-grid h3{margin:0 0 10px;font-size:22px;line-height:1.16}
+  .service-grid p{font-size:14px;line-height:1.65}
+  .comparison{border-radius:14px;aspect-ratio:var(--photo-ratio,16/9)}
+  .comparison>img,.comparison-after img{object-fit:contain;background:#eae6dd}
+  .comparison .label{top:10px;padding:7px 11px;font-size:10px;letter-spacing:.06em}
+  .comparison .label.before{left:10px}.comparison .label.after{right:10px}
+  .comparison:after{width:40px;height:40px;font-size:20px}
+  .comparison input{touch-action:pan-y}
+  .transformation-grid{grid-template-columns:1fr;gap:22px}
+  .project-card,.ba-project{border-radius:16px;box-shadow:0 8px 24px rgba(8,26,43,.06)}
+  .project-card:last-child{grid-column:auto}
+  .project-card figure,.project-card:last-child figure{aspect-ratio:16/9}
+  .project-card-body{padding:21px}
+  .project-card h3{font-size:27px;line-height:1.15;margin:9px 0 12px}
+  .project-card p{font-size:15px;line-height:1.65}
+  .view-gallery-link{min-height:44px;display:inline-flex;align-items:center;margin-top:10px}
+  .portfolio-note{text-align:left;margin-top:20px}
+  .gallery{gap:18px}
+  .gallery figure,.gallery figure.wide{min-height:0;aspect-ratio:4/3;border-radius:16px}
+  .gallery figcaption{padding:56px 19px 19px;gap:12px;flex-wrap:wrap}
+  .gallery figcaption strong{font-size:25px;max-width:100%}
+  .gallery figcaption span{font-size:10px;letter-spacing:.1em}
+  .process-grid{gap:30px}
+  .process-photo{height:auto;aspect-ratio:1200/569;border-radius:14px}
+  .process-photo img{height:auto;object-fit:contain}
+  .process ol{margin-top:28px}
+  .process li{grid-template-columns:28px 1fr;gap:12px;padding:19px 0}
+  .process h3{font-size:18px}.process li p{font-size:15px;line-height:1.65;color:#cad2da}
+  .commercial-card{padding:26px 20px;gap:26px;border-radius:18px}
+  .commercial-card p:not(.eyebrow){font-size:15px;line-height:1.7;color:#d0d7dd}
+  .mini-before-after{gap:16px}
+  .mini-before-after img{height:auto;aspect-ratio:auto}
+  .mini-before-after figcaption{font-size:10px;padding:7px 10px;top:9px;left:9px}
+  .estimate-grid{gap:28px}
+  .contact-lines{gap:0;margin-top:18px;font-size:14px}
+  .contact-lines a{min-height:44px;padding:10px 0}
+  #estimate-form{padding:24px 20px;gap:18px;border-radius:18px;grid-template-columns:1fr}
+  #estimate-form label{font-size:13px;gap:8px}
+  #estimate-form input,#estimate-form select,#estimate-form textarea{font-size:16px;padding:13px 12px;min-height:48px}
+  .full{grid-column:1/-1}
+  .form-note{font-size:12px;line-height:1.65}
+  .request-actions{flex-direction:column}
+  .request-actions .button{width:100%}
+  .gallery-hero,.category-hero{padding:112px 0 38px}
+  .gallery-hero h1,.category-hero h1{font-size:clamp(34px,9vw,52px);line-height:1.08;letter-spacing:-.02em;text-wrap:balance}
+  .gallery-hero>div>p:not(.eyebrow),.category-intro{font-size:15px;line-height:1.7;margin-top:18px}
+  .back-link{margin-bottom:20px;min-height:36px;align-items:center;font-size:10px}
+  .gallery-subnav{display:flex;flex-wrap:nowrap;overflow-x:auto;gap:8px;padding:2px 0 12px;margin-top:24px;scroll-snap-type:x proximity;scrollbar-width:thin;scrollbar-color:#c69a44 #102d48}
+  .gallery-subnav a{flex:0 0 auto;min-height:44px;display:flex;align-items:center;justify-content:center;padding:11px 15px;font-size:11px;scroll-snap-align:start}
+  .gallery-section{padding:34px 0 48px}
+  .category-count{margin-bottom:22px;padding-bottom:16px}
+  .category-count span{font-size:10px;letter-spacing:.09em}
+  .ba-grid{gap:24px}
+  .ba-copy{padding:21px 20px}
+  .ba-copy h2{font-size:26px;line-height:1.16}
+  .ba-copy p{font-size:14px;line-height:1.65}
+  .gallery-hub-grid{gap:20px}
+  .gallery-hub-card{grid-template-columns:1fr;min-height:0;border-radius:16px}
+  .gallery-hub-card figure{min-height:0;aspect-ratio:16/9}
+  .gallery-hub-body{padding:23px}
+  .gallery-hub-body h2{font-size:30px}
+  .gallery-hub-body strong{min-height:44px;display:flex;align-items:center}
+  .gallery-library-note{gap:14px;font-size:14px;line-height:1.65}
+  .gallery-back-cta{padding:24px;margin-top:30px;gap:20px}
+  .gallery-back-cta p{font-size:26px;line-height:1.2}
+  .process-masonry{columns:1}
+  .process-tile{margin-bottom:20px;border-radius:14px}
+  .process-tile figcaption{padding:18px}
+  .process-tile strong{font-size:22px;line-height:1.2}
+  .process-tile span{font-size:10px}
+  footer{padding:38px 0 24px}
+  .footer-grid{grid-template-columns:1fr;gap:24px}
+  .footer-grid a{min-height:36px;display:inline-flex;align-items:center}
+  .mobile-cta{left:14px;right:14px;bottom:calc(10px + env(safe-area-inset-bottom,0px));border:1px solid rgba(226,189,105,.45);border-radius:16px;grid-template-columns:1fr 1.5fr;box-shadow:0 8px 28px #0004}
+  .mobile-cta a{min-height:50px;padding:14px 10px;font-size:14px}
+  body.menu-open .mobile-cta{visibility:hidden}
+  body .site-header #site-nav{padding:90px 26px 70px;overflow-y:auto;justify-content:safe center}
+  body .site-header #site-nav:after{content:"SEACOL PAINTING LLC · SEATTLE";font-size:9px;letter-spacing:.13em;bottom:25px}
+  body .site-header #site-nav>a:not(.nav-cta){min-height:58px;font-size:clamp(29px,8vw,40px)}
+  .legal{padding:112px 0 45px!important}.legal h1{font-size:38px!important}
+  a:focus-visible,button:focus-visible{outline:3px solid var(--gold);outline-offset:4px}
+  @media(max-width:380px){.service-grid{grid-template-columns:1fr}.service-grid article{padding:22px}.service-grid h3{font-size:24px}.hero-content{padding-top:140px}.container{width:calc(100% - 32px)}}
+  @media(max-height:520px){body .site-header #site-nav{justify-content:flex-start;padding-top:76px}body .site-header #site-nav>a:not(.nav-cta){min-height:44px;font-size:26px}body .site-header #site-nav:after{display:none}}
+  @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.project-card,.project-card img,.button{transition:none}}
+}
