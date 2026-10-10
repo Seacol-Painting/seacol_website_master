@@ -34,7 +34,7 @@
   .service-grid p{font-size:14px;line-height:1.65}
   .comparison{border-radius:14px;aspect-ratio:var(--photo-ratio,16/9)}
   .comparison>img,.comparison-after img{object-fit:contain;background:#eae6dd}
-  .comparison .label{top:10px;padding:7px 11px;font-size:10px;letter-spacing:.06em}
+  .comparison .label{top:10px;padding:5px 9px;font-size:10px;letter-spacing:.06em}
   .comparison .label.before{left:10px}.comparison .label.after{right:10px}
   .comparison:after{width:40px;height:40px;font-size:20px}
   .comparison input{touch-action:pan-y}
