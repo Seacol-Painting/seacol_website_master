@@ -34,7 +34,7 @@ body.gallery-page{background:var(--paper)}
 .ba-copy>span{display:block;color:#8b6a2f;font-size:9px;text-transform:uppercase;letter-spacing:.16em;font-weight:850;margin-bottom:7px}
 .ba-copy h2{font-family:Georgia,"Times New Roman",serif;font-size:28px;line-height:1.12;letter-spacing:.006em;font-weight:500;margin:0 0 9px}
 .ba-copy p{margin:0;color:var(--muted);font-size:14px;line-height:1.62}
-.gallery-comparison{aspect-ratio:16/10;border-radius:0;box-shadow:none}
+.gallery-comparison{aspect-ratio:16/10;border-radius:0;box-shadow:none;background:#ece8df;max-height:760px}.gallery-comparison>img,.gallery-comparison .comparison-after img{object-fit:contain!important;object-position:center!important;image-rendering:auto;transform:none!important}.gallery-comparison .comparison-after{background:#ece8df}
 .gallery-comparison .label{top:15px}
 .gallery-back-cta{margin-top:48px;padding:28px 32px;border-radius:18px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:25px}
 .gallery-back-cta p{margin:0;font-family:Georgia,"Times New Roman",serif;font-size:27px;line-height:1.15}
@@ -48,3 +48,5 @@ body.gallery-page{background:var(--paper)}
 @media(max-width:980px){.gallery-hub-grid{grid-template-columns:1fr}.gallery-hub-card{grid-template-columns:1fr 1fr}.ba-grid{grid-template-columns:1fr}.ba-grid-large .ba-project:nth-child(odd):last-child{grid-column:auto;max-width:none}.process-masonry{columns:3 220px}}
 @media(max-width:700px){.gallery-hero,.category-hero{padding:126px 0 60px}.gallery-hero h1,.category-hero h1{font-size:47px;line-height:1.05}.gallery-hero>div>p:not(.eyebrow),.category-intro{font-size:16px}.gallery-subnav{display:grid;grid-template-columns:1fr 1fr}.gallery-subnav a{text-align:center}.gallery-section{padding:64px 0}.gallery-hub-card{grid-template-columns:1fr;min-height:0}.gallery-hub-card figure{min-height:270px}.gallery-hub-body{padding:24px}.gallery-library-note{flex-direction:column}.gallery-library-note span{text-align:left}.gallery-comparison{aspect-ratio:4/3}.gallery-back-cta{align-items:flex-start;flex-direction:column;padding:24px}.gallery-back-cta .button{width:100%}.process-masonry{columns:2 160px}}
 @media(max-width:440px){.gallery-subnav{grid-template-columns:1fr}.process-masonry{columns:1}}
+/* Preserve original composition in project comparisons; never crop photos to fill the card. */
+.gallery-comparison[data-ratio-ready="true"]{aspect-ratio:var(--photo-ratio,16/10)}

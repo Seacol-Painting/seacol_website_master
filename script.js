@@ -34,10 +34,23 @@ nav.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-touchSt
 document.querySelectorAll('[data-comparison]').forEach(box=>{
   const range=box.querySelector('input');
   const after=box.querySelector('.comparison-after');
+  const base=box.querySelector(':scope > img');
+  const fitRatio=()=>{
+    if(base?.naturalWidth&&base?.naturalHeight){
+      const ratio=base.naturalWidth/base.naturalHeight;
+      const safe=Math.min(2.2,Math.max(.72,ratio));
+      box.style.setProperty('--photo-ratio',String(safe));
+      box.dataset.ratioReady='true';
+    }
+  };
   const update=()=>{
     after.style.clipPath=`inset(0 ${100-range.value}% 0 0)`;
     box.style.setProperty('--comparison',range.value+'%');
   };
+  if(base){
+    if(base.complete) fitRatio();
+    else base.addEventListener('load',fitRatio,{once:true});
+  }
   range.addEventListener('input',update);
   update();
 });
