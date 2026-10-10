@@ -56,11 +56,11 @@ body.gallery-page{background:var(--paper)}
 .gallery-comparison.vanity-comparison>img{object-fit:cover!important;object-position:38% center!important}
 .gallery-comparison.vanity-comparison .comparison-after img{object-fit:cover!important;object-position:center 65%!important}
 
-/* Additional exterior photographs retain their complete original composition. */
-.exterior-additions{margin-top:72px}
-.exterior-additions h2{font-family:Georgia,serif;font-weight:500;font-size:clamp(30px,4vw,46px);line-height:1.15;margin:0 0 30px}
-.exterior-photo-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:26px;align-items:start}
-.exterior-photo-grid figure{margin:0;overflow:hidden;border:1px solid var(--line);border-radius:18px;background:white}
-.exterior-photo-grid img{display:block;width:100%;height:auto}
-.exterior-photo-grid figcaption{padding:18px 22px;font-family:Georgia,serif;font-size:22px;color:var(--navy)}
-@media(max-width:700px){.exterior-photo-grid{grid-template-columns:1fr;gap:20px}.exterior-additions{margin-top:48px}}
+/* Additional project photographs retain their complete original composition. */
+.project-additions{margin-top:72px}
+.project-additions h2{font-family:Georgia,serif;font-weight:500;font-size:clamp(30px,4vw,46px);line-height:1.15;margin:0 0 30px}
+.project-photo-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:26px;align-items:start}
+.project-photo-grid figure{margin:0;overflow:hidden;border:1px solid var(--line);border-radius:18px;background:white}
+.project-photo-grid img{display:block;width:100%;height:auto}
+.project-photo-grid figcaption{padding:18px 22px;font-family:Georgia,serif;font-size:22px;color:var(--navy)}
+@media(max-width:700px){.project-photo-grid{grid-template-columns:1fr;gap:20px}.project-additions{margin-top:48px}}
