@@ -1,7 +1,7 @@
 /* Mobile-only presentation. Desktop rules and content remain unchanged. */
 @media (max-width:850px){
   html{scroll-padding-top:88px}
-  body{padding-bottom:calc(78px + env(safe-area-inset-bottom,0px))}
+  body{padding-bottom:0}
   main{overflow-x:clip}
   .container{width:calc(100% - 36px);max-width:680px}
   .section{padding:58px 0}
@@ -103,9 +103,6 @@
   footer{padding:38px 0 24px}
   .footer-grid{grid-template-columns:1fr;gap:24px}
   .footer-grid a{min-height:36px;display:inline-flex;align-items:center}
-  .mobile-cta{left:14px;right:14px;bottom:calc(10px + env(safe-area-inset-bottom,0px));border:1px solid rgba(226,189,105,.45);border-radius:16px;grid-template-columns:1fr 1.5fr;box-shadow:0 8px 28px #0004}
-  .mobile-cta a{min-height:50px;padding:14px 10px;font-size:14px}
-  body.menu-open .mobile-cta{visibility:hidden}
   body .site-header #site-nav{padding:90px 26px 70px;overflow-y:auto;justify-content:safe center}
   body .site-header #site-nav:after{content:"SEACOL PAINTING LLC · SEATTLE";font-size:9px;letter-spacing:.13em;bottom:25px}
   body .site-header #site-nav>a:not(.nav-cta){min-height:58px;font-size:clamp(29px,8vw,40px)}
