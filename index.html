@@ -69,9 +69,13 @@
 
     <section class="section intro" id="about" aria-labelledby="about-title">
       <div class="container about-layout">
-        <figure class="about-photo">
-          <img src="assets/projects/coffered-ceiling-original.jpg" alt="Coffered ceiling, white architectural trim and detailed interior painting by SEACOL" loading="lazy" decoding="async" />
-        </figure>
+        <div class="about-photo comparison" data-comparison>
+          <img src="assets/projects/about-interior-after-original.jpg" alt="After: navy blue walls and white architectural trim" loading="lazy" decoding="async" />
+          <div class="comparison-after"><img src="assets/projects/about-interior-before-original.jpg" alt="Before: interior walls and trim during preparation and masking" loading="lazy" decoding="async" /></div>
+          <input type="range" min="0" max="100" value="50" aria-label="Compare interior painting before and after" />
+          <span class="label before">Before</span>
+          <span class="label after">After</span>
+        </div>
         <div class="about-copy">
           <p class="eyebrow dark">Painting is an art.</p>
           <h2 id="about-title">Hire artists,<br />not just painters.</h2>
