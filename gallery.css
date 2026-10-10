@@ -50,3 +50,8 @@ body.gallery-page{background:var(--paper)}
 @media(max-width:440px){.gallery-subnav{grid-template-columns:1fr}.process-masonry{columns:1}}
 /* Preserve original composition in project comparisons; never crop photos to fill the card. */
 .gallery-comparison[data-ratio-ready="true"]{aspect-ratio:var(--photo-ratio,16/10)}
+
+/* Match the portrait before and landscape after around the complete vanity. */
+.gallery-comparison.vanity-comparison{aspect-ratio:1/1;max-height:none}
+.gallery-comparison.vanity-comparison>img{object-fit:cover!important;object-position:38% center!important}
+.gallery-comparison.vanity-comparison .comparison-after img{object-fit:cover!important;object-position:center 65%!important}
