@@ -29,7 +29,7 @@
   .trust-row{margin-top:24px;gap:8px;font-size:12px;line-height:1.5}
   .button{min-height:48px;padding:13px 18px}
   .service-grid{border:0;gap:12px;grid-template-columns:1fr 1fr}
-  .service-grid article{padding:20px 17px;min-height:0;border:1px solid var(--line);border-radius:14px;background:#fff}
+  .service-grid .service-photo{padding:20px 17px;min-height:0;border:1px solid var(--line);border-radius:14px;background:#fff}
   .service-grid h3{margin:0 0 10px;font-size:22px;line-height:1.16}
   .service-grid p{font-size:14px;line-height:1.65}
   .comparison{border-radius:14px;aspect-ratio:var(--photo-ratio,16/9)}
@@ -108,7 +108,7 @@
   body .site-header #site-nav>a:not(.nav-cta){min-height:58px;font-size:clamp(29px,8vw,40px)}
   .legal{padding:112px 0 45px!important}.legal h1{font-size:38px!important}
   a:focus-visible,button:focus-visible{outline:3px solid var(--gold);outline-offset:4px}
-  @media(max-width:380px){.service-grid{grid-template-columns:1fr}.service-grid article{padding:22px}.service-grid h3{font-size:24px}.hero-content{padding-top:140px}.container{width:calc(100% - 32px)}}
+  @media(max-width:380px){.service-grid{grid-template-columns:1fr}.service-grid .service-photo{padding:22px}.service-grid h3{font-size:24px}.hero-content{padding-top:140px}.container{width:calc(100% - 32px)}}
   @media(max-height:520px){body .site-header #site-nav{justify-content:flex-start;padding-top:76px}body .site-header #site-nav>a:not(.nav-cta){min-height:44px;font-size:26px}body .site-header #site-nav:after{display:none}}
   @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.project-card,.project-card img,.button{transition:none}}
 }
