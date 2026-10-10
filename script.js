@@ -59,19 +59,51 @@ document.documentElement.lang='en';
 const year=document.querySelector('#year');
 if(year) year.textContent=new Date().getFullYear();
 
+function prepareEstimateRequest(data){
+  const lines=[
+    'Hello SEACOL PAINTING LLC, I would like to request a free estimate.',
+    `Name: ${data.get('name')}`,
+    `Email: ${data.get('email')}`,
+    `Phone: ${data.get('phone') || 'Not provided'}`,
+    `City: ${data.get('city')}`,
+    `Project: ${data.get('project')}`,
+    `Property: ${data.get('property')}`,
+    `Details: ${data.get('details')}`
+  ];
+  const body=lines.join('\n');
+  return {
+    body,
+    email:`mailto:info@seacolpaintingllc.com?subject=${encodeURIComponent('Estimate request - '+data.get('project'))}&body=${encodeURIComponent(body)}`,
+    sms:`sms:+12065732474?body=${encodeURIComponent(body)}`
+  };
+}
 const estimateForm=document.querySelector('#estimate-form');
 if(estimateForm){
+  const options=document.querySelector('#request-options');
+  const status=document.querySelector('#copy-status');
   estimateForm.addEventListener('submit',e=>{
     e.preventDefault();
-    const d=new FormData(e.currentTarget);
-    const lines=[
-      'Hello SEACOL, I would like to request a free estimate.',
-      `Name: ${d.get('name')}`,
-      `City: ${d.get('city')}`,
-      `Project: ${d.get('project')}`,
-      `Property: ${d.get('property')}`,
-      `Details: ${d.get('details')}`
-    ];
-    window.location.href=`sms:+12065732474?&body=${encodeURIComponent(lines.join('\n'))}`;
+    const request=prepareEstimateRequest(new FormData(estimateForm));
+    document.querySelector('#send-email').href=request.email;
+    document.querySelector('#send-text').href=request.sms;
+    document.querySelector('#request-preview').value=request.body;
+    status.textContent='';
+    options.hidden=false;
+    document.querySelector('#request-options-title').focus();
+  });
+  estimateForm.addEventListener('input',e=>{
+    if(e.target.closest('#request-options')) return;
+    options.hidden=true;
+    status.textContent='';
+  });
+  document.querySelector('#copy-request').addEventListener('click',async()=>{
+    const preview=document.querySelector('#request-preview');
+    try{
+      await navigator.clipboard.writeText(preview.value);
+      status.textContent='Request copied. Paste it into your email or messaging app.';
+    }catch{
+      preview.focus();preview.select();
+      status.textContent='Select and copy the request above, then paste it into your email or messaging app.';
+    }
   });
 }
