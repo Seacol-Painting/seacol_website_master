@@ -3,10 +3,6 @@ menuExperience.rel='stylesheet';
 menuExperience.href='menu-experience.css';
 document.head.appendChild(menuExperience);
 
-const logoRefinement=document.createElement('link');
-logoRefinement.rel='stylesheet';
-logoRefinement.href='logo-refinement.css';
-document.head.appendChild(logoRefinement);
 
 const header=document.querySelector('.site-header');
 const menuButton=document.querySelector('.menu-button');

@@ -1,26 +1,8 @@
-/* SEACOL logo refinement: cleaner silhouette, stronger color, subtle premium depth */
-.brand{gap:14px}
-.brand img,.footer-brand img{
-  -webkit-mask:url("assets/logo-clean-mask.svg") center/contain no-repeat;
-  mask:url("assets/logo-clean-mask.svg") center/contain no-repeat;
-}
-.brand img{
-  width:48px;height:60px;object-fit:contain;
-  filter:saturate(1.12) contrast(1.06) brightness(1.02) drop-shadow(0 3px 6px rgba(0,0,0,.38)) drop-shadow(0 0 6px rgba(226,189,105,.16));
-  transition:filter .28s ease,transform .28s ease;
-}
-.brand:hover img{
-  transform:translateY(-1px) scale(1.02);
-  filter:saturate(1.16) contrast(1.08) brightness(1.03) drop-shadow(0 4px 8px rgba(0,0,0,.40)) drop-shadow(0 0 8px rgba(226,189,105,.22));
-}
-.footer-brand img{
-  width:52px;height:64px;object-fit:contain;
-  filter:saturate(1.10) contrast(1.05) brightness(1.01) drop-shadow(0 3px 7px rgba(0,0,0,.42)) drop-shadow(0 0 5px rgba(226,189,105,.14));
-}
-@media(max-width:850px){
-  .brand{gap:11px}
-  .brand img{width:43px;height:54px}
-}
-@media(max-width:560px){
-  .brand img{width:40px;height:50px}
-}
+/* Official master logo: preserve artwork, transparency and native proportions. */
+.brand{gap:0;flex-shrink:0}
+.brand img,.footer-brand img{display:block;object-fit:contain;object-position:center;-webkit-mask:none;mask:none;filter:none;transform:none}
+.brand img{width:75px;height:100px}
+.brand:hover img{filter:none;transform:none}
+.footer-brand img{width:120px;height:160px}
+@media(min-width:851px){.nav-wrap{height:116px}html{scroll-padding-top:132px}}
+@media(max-width:850px){.brand img{width:48px;height:64px}}
