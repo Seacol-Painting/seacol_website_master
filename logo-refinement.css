@@ -1,8 +1,9 @@
-/* Official master logo: preserve artwork, transparency and native proportions. */
-.brand{gap:0;flex-shrink:0}
-.brand img,.footer-brand img{display:block;object-fit:contain;object-position:center;-webkit-mask:none;mask:none;filter:none;transform:none}
-.brand img{width:75px;height:100px}
-.brand:hover img{filter:none;transform:none}
-.footer-brand img{width:120px;height:160px}
+/* Official horizontal artwork: keep original colors, transparency and 2:1 proportions. */
+body .brand{gap:0;flex-shrink:0}
+body .brand img,body .footer-brand img{display:block;object-fit:contain;object-position:center;-webkit-mask:none;mask:none;filter:none;transform:none;height:auto}
+body .brand img{width:200px}
+body .brand:hover img{filter:none;transform:none}
+body .footer-brand img{width:260px;max-width:100%}
 @media(min-width:851px){.nav-wrap{height:116px}html{scroll-padding-top:132px}}
-@media(max-width:850px){.brand img{width:48px;height:64px}}
+@media(min-width:851px) and (max-width:1100px){body .brand img{width:160px}.site-header nav{gap:18px}}
+@media(max-width:850px){body .brand img{width:120px}}
