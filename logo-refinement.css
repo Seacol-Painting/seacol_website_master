@@ -1,9 +1,11 @@
-/* Official horizontal artwork: keep original colors, transparency and 2:1 proportions. */
+/* Compact, non-sticky navigation with the matte-gold wordmark. */
 body .brand{gap:0;flex-shrink:0}
 body .brand img,body .footer-brand img{display:block;object-fit:contain;object-position:center;-webkit-mask:none;mask:none;filter:none;transform:none;height:auto}
-body .brand img{width:200px}
+body .brand img{width:144px}
 body .brand:hover img{filter:none;transform:none}
 body .footer-brand img{width:260px;max-width:100%}
-@media(min-width:851px){.nav-wrap{height:116px}html{scroll-padding-top:132px}}
-@media(min-width:851px) and (max-width:1100px){body .brand img{width:160px}.site-header nav{gap:18px}}
-@media(max-width:850px){body .brand img{width:120px}}
+body .site-header{position:absolute;inset:0 0 auto}
+html{scroll-padding-top:24px}
+@media(min-width:851px){.nav-wrap{height:80px}}
+@media(min-width:851px) and (max-width:1100px){body .brand img{width:144px}.site-header nav{gap:18px}}
+@media(max-width:850px){body .brand img{width:112px}.nav-wrap{height:64px}html{scroll-padding-top:20px}}
