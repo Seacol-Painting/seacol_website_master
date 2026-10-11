@@ -84,3 +84,13 @@ footer{border-top:1px solid rgba(226,189,105,.16)}
 /* Preserve the original landscape framing in both comparison layers. */
 #about .about-photo.comparison{aspect-ratio:var(--photo-ratio,2048/970);min-width:0;min-height:0;align-self:center;width:100%}
 #about .about-photo.comparison img{position:absolute;inset:0;width:100%;height:100%;aspect-ratio:auto;object-fit:contain;object-position:center}
+
+/* Consistent, slightly open tracking across all page and project titles. */
+body :is(h1,h2,h3,h4,h5,h6),
+body .gallery figcaption strong,
+body .project-photo-grid figcaption{letter-spacing:.025em!important}
+@media(max-width:850px){
+ body :is(h1,h2,h3,h4,h5,h6),
+ body .gallery figcaption strong,
+ body .project-photo-grid figcaption{letter-spacing:.02em!important}
+}
