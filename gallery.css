@@ -68,3 +68,8 @@ body.gallery-page{background:var(--paper)}
 /* Comparison photos keep their slider geometry inside additional project cards. */
 .project-photo-grid .comparison>img,.project-photo-grid .comparison-after img{position:absolute;inset:0;width:100%;height:100%}
 .ba-grid{align-items:start}
+
+/* Match landscape/portrait shelf photos in one focused frame. */
+.gallery-comparison.shelving-comparison{aspect-ratio:4/5!important;max-height:none}
+.gallery-comparison.shelving-comparison>img{object-fit:cover!important;object-position:50% 60%!important}
+.gallery-comparison.shelving-comparison .comparison-after img{object-fit:cover!important;object-position:64% 50%!important}
