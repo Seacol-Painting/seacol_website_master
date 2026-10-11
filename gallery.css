@@ -73,3 +73,8 @@ body.gallery-page{background:var(--paper)}
 .gallery-comparison.shelving-comparison{aspect-ratio:4/5!important;max-height:none}
 .gallery-comparison.shelving-comparison>img{object-fit:cover!important;object-position:50% 60%!important}
 .gallery-comparison.shelving-comparison .comparison-after img{object-fit:cover!important;object-position:64% 50%!important}
+
+/* Focus both deck views on the same railing and floor, using the original before file. */
+.gallery-comparison.deck-restoration-comparison{aspect-ratio:3/4!important;max-height:none}
+.gallery-comparison.deck-restoration-comparison>img{object-fit:cover!important;object-position:56% 50%!important}
+.gallery-comparison.deck-restoration-comparison .comparison-after img{object-fit:cover!important;object-position:50% 0%!important}
