@@ -75,7 +75,7 @@
         throw new Error(text);
       }
       accepted = true;
-      message(`Thank you. Your estimate request has been received. Reference: ${result.reference}. SEACOL will follow up using the contact details you provided.`, 'success');
+      message('Thank you for considering SEACOL. We’ve received your request and look forward to learning more about your project. We’ll be in touch soon.', 'success');
       fields.hidden = true;
       submit.hidden = true;
       another.hidden = false;

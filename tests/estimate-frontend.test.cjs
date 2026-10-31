@@ -212,16 +212,16 @@ test('HTTP success alone or a missing/malformed acknowledgement never reports re
       f.requests[0].respond(statusCode, body, options); await pending;
       assertRecoverable(f);
       assert.equal(f.another.hidden, true);
-      assert.doesNotMatch(f.status.textContent, /request has been received/i);
+      assert.doesNotMatch(f.status.textContent, /request has been received|received your request/i);
     });
   }
 });
 
-test('a durable 201 acknowledgement hides fields, shows its reference and emits no personal details', async () => {
+test('a durable 201 acknowledgement confirms receipt without exposing its reference or personal details', async () => {
   const f = fixture(); const pending = f.send();
   f.requests[0].respond(201, { ok: true, reference: 'SC-20261031-ACCEPTED' }); await pending;
   assert.equal(f.status.dataset.state, 'success');
-  assert.match(f.status.textContent, /SC-20261031-ACCEPTED/);
+  assert.doesNotMatch(f.status.textContent, /SC-[A-Z0-9-]+|Reference:/i);
   assert.equal(f.fields.hidden, true);
   assert.equal(f.submit.hidden, true);
   assert.equal(f.submit.disabled, true);
@@ -243,7 +243,7 @@ test('an acknowledged duplicate shows success without counting a second conversi
   const f = fixture(); const pending = f.send();
   f.requests[0].respond(200, { ok: true, reference: 'SC-20261031-EXISTING', duplicate: true }); await pending;
   assert.equal(f.status.dataset.state, 'success');
-  assert.match(f.status.textContent, /SC-20261031-EXISTING/);
+  assert.doesNotMatch(f.status.textContent, /SC-[A-Z0-9-]+|Reference:/i);
   assert.equal(f.fields.hidden, true);
   assert.equal(f.events.length, 0);
 });
