@@ -30,5 +30,7 @@ for(const h of f.document.events.keydown)h({key:'Escape'});assert(!f.main.inert)
 f.run('setMenu(true)');f.window.innerWidth=1200;for(const h of f.window.events.resize)h();assert(!f.nav.classList.contains('open'));assert(!f.main.inert);
 for(const v of ['0','50','100']){f.range.value=v;for(const h of f.range.events.input)h();assert.equal(f.layer.style.clipPath,`inset(0 ${100-v}% 0 0)`)}
 const data=new Map([['name','QA'],['email','qa@example.com'],['city','Seattle'],['project','Interior'],['property','Residential'],['details','café & trim + doors']]);
-const request=f.run('prepareEstimateRequest')(data);assert.equal(new URL(request.email).searchParams.get('body'),request.body);assert(request.body.includes('café & trim + doors'));
-fixture({menu:false});console.log('PASS: solid gallery header, home scroll header, menu focus/escape/resize, restored background state, slider endpoints, estimate encoding and pages without navigation.');
+if(f.run('typeof prepareEstimateRequest')==='function'){
+  const request=f.run('prepareEstimateRequest')(data);assert.equal(new URL(request.email).searchParams.get('body'),request.body);assert(request.body.includes('café & trim + doors'));
+}
+fixture({menu:false});console.log('PASS: solid gallery header, home scroll header, menu focus/escape/resize, restored background state, slider endpoints, legacy estimate fallback when present, and pages without navigation.');

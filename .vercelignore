@@ -2,10 +2,11 @@
 .github
 .env
 .env.*
-tests
-scripts
 __pycache__
 node_modules
+dist
+assets/projects/responsive
+assets/social
 backups
 *.pem
 *.key
