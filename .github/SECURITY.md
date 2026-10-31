@@ -15,18 +15,23 @@ Inline CSS is allowed because existing comparison ratios and interactive slider
 styles depend on it. Test the home page, galleries, mobile menu and estimate form
 in a browser after changing policy.
 
-The estimate form prepares email/SMS locally. `form-action 'none'` prevents a
-native form submission if JavaScript fails; it does not block prepared mailto/SMS
-links. Do not change this policy without reviewing any future form backend.
+The estimate form sends JSON to the same-origin `/api/estimate` endpoint. A
+successful receipt confirms private storage; optional owner email notifications
+run afterward. Email/SMS links remain as fallbacks. `form-action 'none'` blocks
+native form submission, while the CSP permits the same-origin JavaScript request.
+Review the API's validation, origin restrictions and private storage when changing
+the form.
 
 Project photographs carry same-origin CORP and a restricted CORS origin. These
 reduce third-party browser embedding, not downloading, screenshots or rehosting.
-The social sharing image remains outside this rule. No photograph is recompressed.
+Social sharing images remain outside this rule. Original photographs are retained;
+the build generates optimized derivatives.
 
 Secrets, private keys, backup archives and local deployment state must stay out
-of Git. Test files and maintenance documents are excluded from deployment through
-`.vercelignore`. Never store master advertising artwork or private client records
-in the public website directory.
+of Git. Test files and maintenance scripts are available during the build but are
+excluded from the public `dist` output. Server code, configuration and environment
+files must never enter that static output. Never store master advertising artwork
+or private client records in the public website directory.
 
 Keep account recovery codes offline. Review repository access, deployment tokens,
 domain ownership and recovery email periodically. Require strong authentication

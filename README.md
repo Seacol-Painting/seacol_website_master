@@ -39,16 +39,20 @@ The endpoint validates bounded input, origin and content type, rejects a honeypo
 
 Keep customer records only for actual follow-up and recordkeeping needs. Authorized administrators can handle access, correction or deletion requests through the private store. Do not change the store to public.
 
-### Optional email notifications
+### Production email notifications
 
-The notifier is implemented and tested but stays disabled until both variables exist:
+New production estimate requests notify `info@seacolpaintingllc.com` through Resend, using `requests@seacolpaintingllc.com` as the sender and the customer's email as reply-to. Preview and development never send owner notifications.
 
-- `RESEND_API_KEY`: supplied by a connected Resend integration.
-- `ESTIMATE_NOTIFICATION_FROM`: a verified address on `seacolpaintingllc.com`, for example `requests@seacolpaintingllc.com`.
+Required Production server environment variables:
 
-Connecting Resend requires the owner to accept marketplace/provider terms and choose a plan. Verify the sending domain before setting the sender. Notifications go only to `info@seacolpaintingllc.com`, use the customer's email as reply-to, and have a stable idempotency key. An email failure never discards a saved request. Notification metadata goes under `notifications/`; failed notifications should be reviewed through the provider or handled directly from the inbox. Automatic email retries are not enabled.
+- `RESEND_API_KEY`: a Resend key with Sending access restricted to `seacolpaintingllc.com`.
+- `ESTIMATE_NOTIFICATION_FROM`: `requests@seacolpaintingllc.com`.
 
-Until the provider is connected and a live test is verified, check the private inbox directly. Do not describe notifications as active.
+Notifications run only after the request is saved privately. Repeating an identical submission ID and payload returns the existing receipt without sending another notification. The provider idempotency key is `seacol-estimate/<submissionId>`.
+
+An email failure never discards a saved request. Private notification metadata is stored at `notifications/<submissionId>.json`. An `accepted` status confirms provider acceptance. Resend's `delivered` event confirms acceptance by the recipient's mail server, not necessarily placement in the primary inbox; verify actual receipt in the owner's mailbox. Automatic email retries are not enabled. Review failures through Resend and follow up from the private inbox.
+
+After changing email configuration, verify one synthetic production submission, its saved notification status, and receipt by the owner. Repeat the same submission ID and payload to confirm no second notification is sent.
 
 ## Analytics
 
