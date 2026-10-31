@@ -3,6 +3,8 @@
 .env
 .env.*
 tests
+scripts
+__pycache__
 node_modules
 backups
 *.pem
