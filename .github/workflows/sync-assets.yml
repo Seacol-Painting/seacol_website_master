@@ -91,6 +91,5 @@ jobs:
           else
             compare_url="https://github.com/${GITHUB_REPOSITORY}/compare/${DEFAULT_BRANCH}...${sync_branch}?expand=1"
             printf 'The asset branch was saved, but GitHub could not create the pull request. Open it manually: %s\n' "$compare_url" >> "$GITHUB_STEP_SUMMARY"
-            echo '::error::Could not create the asset pull request. Check the reported GitHub error and Actions pull-request permissions; main was not changed. Use the comparison link in the run summary.'
-            exit 1
+            echo '::warning::Assets were saved to the review branch, but the pull request must be opened manually. Check the reported GitHub error and Actions pull-request permissions; main was not changed. Use the comparison link in the run summary.'
           fi
