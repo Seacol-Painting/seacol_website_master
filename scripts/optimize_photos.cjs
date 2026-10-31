@@ -199,7 +199,7 @@ async function main() {
     for (const dpr of [1, 2]) {
       const selected = new Map();
       for (const item of items) {
-        const cssWidth = { hero: 390, 'home-service': 171, 'home-commercial': 314 }[item.role] || 354;
+        const cssWidth = { hero: 1440, 'home-service': 171, 'home-commercial': 314 }[item.role] || 354;
         const variants = generated.get(item.source).variants;
         const chosen = variants.find((v) => v.width >= cssWidth * dpr) || variants.at(-1);
         selected.set(chosen.src, chosen.bytes);

@@ -74,7 +74,7 @@
 .estimate-consent{flex-direction:row;align-items:flex-start;gap:10px;font-size:12px;font-weight:400;line-height:1.6}
 .estimate-consent input{width:18px;height:18px;flex:none;margin:2px 0 0;accent-color:var(--navy)}
 .estimate-consent a{text-decoration:underline;text-underline-offset:3px}
-.estimate-status{border:1px solid var(--line);border-radius:12px;padding:18px;font-size:14px;line-height:1.6;background:var(--ivory)}
+.estimate-status{border:1px solid var(--line);border-radius:12px;padding:18px;font-size:14px;line-height:1.6;background:var(--ivory);overflow-wrap:anywhere}
 .estimate-status[data-state="success"]{border-color:#9caf98;color:#24452c;background:#f0f6ed}
 .estimate-status[data-state="error"]{border-color:#d8b4ac;color:#742d24;background:#fff5f2}
 .estimate-status:focus-visible{outline:2px solid var(--gold);outline-offset:3px}

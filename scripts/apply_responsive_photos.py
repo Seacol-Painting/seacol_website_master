@@ -20,7 +20,9 @@ MANIFEST = ROOT / 'assets/responsive-manifest.json'
 MOBILE = '(max-width: 380px) calc(100vw - 32px), (max-width: 716px) calc(100vw - 36px), (max-width: 850px) 680px'
 FULL = MOBILE + ', (max-width: 1220px) calc(100vw - 40px), 1180px'
 SIZES = {
-    'hero': '100vw',
+    # The panoramic photograph covers a tall mobile hero; its effective width
+    # is much larger than the viewport. Keep the 1440 px source for that crop.
+    'hero': '(max-width: 850px) 1440px, 100vw',
     'full-width': FULL,
     'gallery-comparison': MOBILE + ', (max-width: 980px) calc(100vw - 40px), (max-width: 1220px) calc(50vw - 34px), 576px',
     'gallery-comparison-wide': MOBILE + ', (max-width: 980px) calc(100vw - 40px), 900px',
@@ -160,7 +162,7 @@ def stats(records, entries):
         for _, _, item in records:
             # Model a 390 px viewport with the existing CSS. This is a transfer
             # estimate for a full-page visit, not a measured load-time claim.
-            css_width = {'hero': 390, 'home-service': 171, 'home-commercial': 314}.get(item['role'], 354)
+            css_width = {'hero': 1440, 'home-service': 171, 'home-commercial': 314}.get(item['role'], 354)
             variants = entries[item['source']]['variants']
             chosen = next((v for v in variants if v['width'] >= css_width * dpr), variants[-1])
             selected[chosen['src']] = chosen['bytes']
