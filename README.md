@@ -24,7 +24,7 @@ node tests/analytics.test.cjs
 
 ## Estimate requests and the private inbox
 
-The form submits JSON to `/api/estimate`. Success means the request was stored privately. The visitor sees a reference and does not need an email app. An interrupted connection preserves their entries and reuses the same ID when retrying the same request. Email/text links remain as a fallback.
+The form submits JSON to `/api/estimate`. Success means the request was stored privately. The visitor sees a welcoming confirmation and does not need an email app. Request references stay in the private records and owner notifications rather than the customer-facing message. An interrupted connection preserves their entries and reuses the same ID when retrying the same request. Email/text links remain as a fallback.
 
 Requests are stored in the private Vercel Blob store **seacol-website-inbox** (`store_ERBXwMNbaDaLdkNk`). In the Vercel project, open **Storage**, select this store, and inspect the **estimates** folder. Only authorized account members can read these records. There is no public endpoint for listing or downloading requests. Preview verification records are separated under `preview/estimates/`; production records remain under `estimates/`. Preview requests never send owner email notifications.
 
