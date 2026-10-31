@@ -1,54 +1,95 @@
 name: Sync website assets
 
+# This imports the original production asset set INTO GitHub when explicitly
+# requested. Normal publication goes the other way: GitHub main -> Vercel.
+# Do not import automatically during a deployment or overwrite main directly.
 on:
+  workflow_dispatch:
   push:
     paths:
       - '.github/workflows/sync-assets.yml'
+      - 'scripts/sync_assets.py'
+      - 'tests/test_sync_assets.py'
+  pull_request:
+    paths:
+      - '.github/workflows/sync-assets.yml'
+      - 'scripts/sync_assets.py'
+      - 'tests/test_sync_assets.py'
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  sync:
+  validate:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-      - name: Download production assets
+      - name: Test safe asset imports
+        run: python3 -m unittest discover -s tests -p 'test_sync_assets.py' -v
+
+  sync:
+    # Imports may only run manually against the protected default branch.
+    if: github.event_name == 'workflow_dispatch' && github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    needs: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    concurrency:
+      group: seacol-production-asset-import
+      cancel-in-progress: false
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Check out the current default branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+
+      - name: Download and validate production assets
+        run: python3 scripts/sync_assets.py
+
+      - name: Propose changed assets for review
         shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
         run: |
           set -euo pipefail
-          mkdir -p assets
-          base="https://seacolpaintingllc.com/assets"
-          files=(
-            after-kitchen.webp
-            before-kitchen.webp
-            builtins.webp
-            commercial-after.webp
-            commercial-before.webp
-            commercial-studio.webp
-            favicon.png
-            hero-kitchen.webp
-            logo-mark.png
-            navy-vanity.webp
-            spray-process.webp
-            two-tone-kitchen.webp
-          )
-          for file in "${files[@]}"; do
-            curl --fail --location --retry 3 "$base/$file" --output "assets/$file"
-          done
-
-      - name: Commit synced assets
-        shell: bash
-        run: |
-          set -euo pipefail
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add assets
+          git add -- assets
           if git diff --cached --quiet; then
-            echo "Assets already match production."
+            echo 'Assets already match production.'
+            echo 'Production assets already match GitHub; no changes were needed.' >> "$GITHUB_STEP_SUMMARY"
             exit 0
           fi
-          git commit -m "Sync SEACOL production assets"
-          git push
+
+          sync_branch="automation/sync-assets-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          git switch -c "$sync_branch"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Sync SEACOL production assets'
+          git -c credential.helper='!gh auth git-credential' push origin "HEAD:refs/heads/$sync_branch"
+
+          cat > "$RUNNER_TEMP/sync-pr-body.md" <<'BODY'
+          ## Why
+          A manual asset import found differences between the original production asset set and GitHub.
+
+          ## Changes
+          Imports the 12 explicitly listed production assets after checking their origin, size and file signatures. No pages, scripts or configuration are downloaded.
+
+          ## Review
+          Confirm that production contains the intended versions before merging, especially the logo. Merging uses the normal GitHub-to-Vercel publication flow. This workflow does not merge or publish automatically.
+          BODY
+
+          if pr_url="$(gh pr create --repo "$GITHUB_REPOSITORY" --base "$DEFAULT_BRANCH" --head "$sync_branch" --title 'Sync SEACOL production assets' --body-file "$RUNNER_TEMP/sync-pr-body.md")"; then
+            printf 'Asset changes are ready for review: %s\n' "$pr_url" >> "$GITHUB_STEP_SUMMARY"
+          else
+            compare_url="https://github.com/${GITHUB_REPOSITORY}/compare/${DEFAULT_BRANCH}...${sync_branch}?expand=1"
+            printf 'The asset branch was saved, but GitHub could not create the pull request. Open it manually: %s\n' "$compare_url" >> "$GITHUB_STEP_SUMMARY"
+            echo '::warning::Assets were saved to the review branch, but the pull request must be opened manually. Check the reported GitHub error and Actions pull-request permissions; main was not changed. Use the comparison link in the run summary.'
+          fi
