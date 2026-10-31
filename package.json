@@ -1,0 +1,20 @@
+{
+  "name": "seacol-website",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": "24.x" },
+  "scripts": {
+    "photos": "node scripts/optimize_photos.cjs",
+    "precheck": "npm run photos",
+    "check": "node scripts/check-site.cjs",
+    "prebuild": "npm run photos",
+    "build": "node scripts/build-site.cjs"
+  },
+  "dependencies": {
+    "@vercel/blob": "2.8.2"
+  },
+  "devDependencies": {
+    "sharp": "0.35.5"
+  }
+}

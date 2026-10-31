@@ -1,4 +1,13 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "installCommand": "npm ci",
+  "functions": {
+    "api/*.js": {
+      "maxDuration": 30
+    }
+  },
   "cleanUrls": true,
   "trailingSlash": false,
   "headers": [
@@ -19,7 +28,7 @@
         },
         {
           "key": "Referrer-Policy",
-          "value": "strict-origin-when-cross-origin"
+          "value": "strict-origin"
         },
         {
           "key": "Permissions-Policy",

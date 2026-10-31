@@ -101,33 +101,3 @@ function prepareEstimateRequest(data){
     sms:`sms:+12065732474?body=${encodeURIComponent(body)}`
   };
 }
-const estimateForm=document.querySelector('#estimate-form');
-if(estimateForm){
-  const options=document.querySelector('#request-options');
-  const status=document.querySelector('#copy-status');
-  estimateForm.addEventListener('submit',e=>{
-    e.preventDefault();
-    const request=prepareEstimateRequest(new FormData(estimateForm));
-    document.querySelector('#send-email').href=request.email;
-    document.querySelector('#send-text').href=request.sms;
-    document.querySelector('#request-preview').value=request.body;
-    status.textContent='';
-    options.hidden=false;
-    document.querySelector('#request-options-title').focus();
-  });
-  estimateForm.addEventListener('input',e=>{
-    if(e.target.closest('#request-options')) return;
-    options.hidden=true;
-    status.textContent='';
-  });
-  document.querySelector('#copy-request').addEventListener('click',async()=>{
-    const preview=document.querySelector('#request-preview');
-    try{
-      await navigator.clipboard.writeText(preview.value);
-      status.textContent='Request copied. Paste it into your email or messaging app.';
-    }catch{
-      preview.focus();preview.select();
-      status.textContent='Select and copy the request above, then paste it into your email or messaging app.';
-    }
-  });
-}

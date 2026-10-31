@@ -1,40 +1,92 @@
-# SEACOL Fine Painting — Website V1
+# SEACOL PAINTING LLC website
 
-Static, responsive website prepared for `seacolpaintingllc.com`.
+Production: https://seacolpaintingllc.com/
+Repository: https://github.com/Seacol-Painting/seacol_website_master
+Vercel project: `seacol_website_v1` in `seacol-painting-llc`.
 
-## Included
-- English / Spanish language switch
-- Responsive premium design
-- Real project photographs, optimized as WebP
-- Before/after slider
-- Residential and commercial services
-- Estimate form that prepares a text message to (206) 573-2474
-- Privacy policy
-- Local business structured data
+Static English pages, responsive project photographs, before/after comparisons and a native Vercel Function for private estimate requests.
 
-## Publish on Vercel
-1. Unzip the folder.
-2. Upload the folder to a new GitHub repository, or drag it into Vercel if your dashboard offers direct upload.
-3. In Vercel, create a new project from the repository.
-4. Framework preset: **Other**.
-5. Build command: leave empty.
-6. Output directory: leave empty.
-7. Deploy.
-8. Add `seacolpaintingllc.com` and `www.seacolpaintingllc.com` in Project Settings → Domains.
+## Development and publication
 
-## Pending before final launch
-- Replace provisional logo if a final vector logo is approved.
-- Add the corporate email after Microsoft 365 is configured.
-- Add contractor license and legal business details when available.
-- Add testimonials and additional exterior/interior/deck project photos.
-- Confirm final service wording and business hours.
+Use Node.js 24 and Python 3. Install the locked dependencies with `npm ci`, then run `npm run build`.
 
-## Publishing and asset recovery
+The build generates photograph variants, checks the website, runs automated tests, and creates `dist` only after those checks pass. Vercel uses the build/output settings in `vercel.json`. GitHub Actions runs the same build on every pull request and push to `main`, including merge queues. An error prevents the new version from publishing. Server modules, tests, maintenance scripts, configuration and environment files stay outside the static output.
 
-Approved pull requests merged into `main` publish through the existing Vercel Git integration. The **Sync website assets** action is a manual recovery import in the opposite direction: it downloads the 12 original assets from the production website and proposes any differences in a new pull request. Run it from **Actions → Sync website assets → Run workflow** on `main` only when intentionally recovering those assets. It never pushes directly to `main` or merges its own pull request. If GitHub does not allow Actions to create pull requests, the run summary supplies a comparison link for opening the saved branch manually.
+Open a pull request for changes. Existing repository protection requires a PR for `main`. Merging a reviewed, passing revision into `main` publishes through the Vercel Git integration. Check deployment status before calling a release complete; an older successful deployment stays live if the new build fails.
+
+```sh
+npm ci
+npm run check
+npm run build
+node tests/estimate-frontend.test.cjs
+node tests/analytics.test.cjs
+```
+
+## Estimate requests and the private inbox
+
+The form submits JSON to `/api/estimate`. Success means the request was stored privately. The visitor sees a reference and does not need an email app. An interrupted connection preserves their entries and reuses the same ID when retrying the same request. Email/text links remain as a fallback.
+
+Requests are stored in the private Vercel Blob store **seacol-website-inbox** (`store_ERBXwMNbaDaLdkNk`). In the Vercel project, open **Storage**, select this store, and inspect the **estimates** folder. Only authorized account members can read these records. There is no public endpoint for listing or downloading requests. Preview verification records are separated under `preview/estimates/`; production records remain under `estimates/`. Preview requests never send owner email notifications.
+
+The inbox is the source of truth. Analytics conversions can be absent when visitors opt out, block analytics or lose a connection. A provider's email acceptance also does not prove delivery to an inbox.
+
+Required server environment variables:
+
+- `BLOB_READ_WRITE_TOKEN`: supplied by the connected private Blob store.
+- `ESTIMATE_RATE_LIMIT_SECRET`: a random server-only secret of at least 32 characters. Never expose it in browser code or Git.
+
+The endpoint validates bounded input, origin and content type, rejects a honeypot, uses distributed rate limiting, and prevents repeated IDs from creating duplicate requests. Records do not contain raw network addresses. Expired rate-limit records stop counting; Blob does not automatically delete them. Maintenance must remove only expired control records, never customer estimates as part of rate-limit cleanup.
+
+Keep customer records only for actual follow-up and recordkeeping needs. Authorized administrators can handle access, correction or deletion requests through the private store. Do not change the store to public.
+
+### Optional email notifications
+
+The notifier is implemented and tested but stays disabled until both variables exist:
+
+- `RESEND_API_KEY`: supplied by a connected Resend integration.
+- `ESTIMATE_NOTIFICATION_FROM`: a verified address on `seacolpaintingllc.com`, for example `requests@seacolpaintingllc.com`.
+
+Connecting Resend requires the owner to accept marketplace/provider terms and choose a plan. Verify the sending domain before setting the sender. Notifications go only to `info@seacolpaintingllc.com`, use the customer's email as reply-to, and have a stable idempotency key. An email failure never discards a saved request. Notification metadata goes under `notifications/`; failed notifications should be reviewed through the provider or handled directly from the inbox. Automatic email retries are not enabled.
+
+Until the provider is connected and a live test is verified, check the private inbox directly. Do not describe notifications as active.
+
+## Analytics
+
+Vercel Web Analytics is enabled on the existing project. `analytics.js` loads the first-party collector only on the exact HTTPS production domain and when Do Not Track and Global Privacy Control are absent. Previews are excluded.
+
+Dashboard: https://vercel.com/seacol-painting-llc/seacol_website_v1/analytics
+
+| Event | Meaning |
+| --- | --- |
+| Native pageview | A public page opened |
+| `gallery_view` | A gallery opened |
+| `section_view` | A section entered the viewing area, once per section/page session |
+| `comparison_interaction` | A before/after control was moved |
+| `estimate_cta_click` | An estimate link was clicked |
+| `estimate_form_start` | A visitor started editing the form |
+| `estimate_submitted` | The browser received confirmation of a newly stored request |
+| `call_click`, `sms_click`, `email_click` | A contact link was clicked |
+
+A contact click does not prove a call or message, and a request does not prove a sale. The collector receives fixed categories and page paths, not names, emails, phone numbers, project descriptions, references or link bodies. Query strings/fragments are removed. External referrers with potentially sensitive paths/query data suppress collection. Session storage only suppresses repeated section events and contains no visitor ID or contact data. No advertising tracker is included.
+
+Analytics uses the existing Vercel plan's usage pricing; no Plus upgrade is required. Current pricing: https://vercel.com/docs/analytics/limits-and-pricing
+
+## Photograph and social card maintenance
+
+The 163 original photographs remain the source of truth. `scripts/optimize_photos.cjs` generates 474 proportional WebP variants and nine 1200 × 630 gallery social cards. These generated assets are excluded from Git and recreated in every build with pinned Sharp. They are included in `dist` and published normally. Source hashes, dimensions, page usage and size estimates live in `assets/responsive-manifest.json`.
+
+Builds fail if an original unexpectedly changes. To deliberately update a source, review the replacement, run `node scripts/optimize_photos.cjs --refresh-sources`, then `python3 scripts/apply_responsive_photos.py --pages index.html gallery*.html`. Inspect the result, run the build, and commit the updated manifest and page references. Preserve aspect ratios and avoid enlarging small originals. SVG photograph wrappers embed WebP bytes; extract those instead of rasterizing as artwork.
+
+Gallery cards are in `assets/social/`, outside the same-origin restriction on project photographs. Each gallery has its own Open Graph and Twitter image/title/description. Sharing platforms can retain old previews until they fetch the page again.
 
 ## Search and logo maintenance
 
-`sitemap.xml`, page canonical links, and internal links use the public HTTPS domain with Vercel's extension-free routes. Update the sitemap when adding or removing a public page; `robots.txt` announces its location. Do not invent `lastmod` dates.
+The sitemap, canonical links and internal links use the HTTPS production domain with extension-free routes. The sitemap lists 11 public pages and is announced in `robots.txt`. Update it when adding/removing pages; do not invent `lastmod` dates.
 
-The existing PNG logo is retained as the source. Pages use losslessly encoded WebP derivatives at 288, 576, and 780 pixels wide, selected through `srcset` for the displayed size, plus a separate 64-pixel PNG favicon. When replacing the approved logo, regenerate these derivatives and preserve its 2:1 aspect ratio and transparency.
+A public sitemap does not confirm indexing. In the owner's Search Console account, select or verify the correct property, submit `https://seacolpaintingllc.com/sitemap.xml`, inspect **Pages**, and review **Performance → Pages** for URLs with impressions/clicks. Use URL Inspection for specific galleries and canonical selection. Google login is required. Public `site:` searches are incomplete and cannot establish an exact indexed-page count.
+
+The original PNG logo is retained. Pages use lossless WebP variants at 288, 576 and 780 pixels plus a 64-pixel favicon. Preserve its 2:1 aspect ratio and transparency.
+
+## Asset recovery
+
+**Sync website assets** is a manual recovery import in the opposite direction from publication: it downloads the 12 original assets from production and proposes differences in a PR. Run it through **Actions → Sync website assets → Run workflow** on `main` only when intentionally recovering assets. It never pushes directly to `main` or merges its PR. If GitHub disallows automated PR creation, the run summary gives a comparison link for the saved branch. Review recovered photograph changes and refresh the manifest intentionally before merging.

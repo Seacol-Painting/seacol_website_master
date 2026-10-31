@@ -10,3 +10,6 @@ __pycache__/
 *.p12
 *.pfx
 backups/
+dist/
+assets/projects/responsive/
+assets/social/

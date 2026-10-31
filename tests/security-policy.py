@@ -5,11 +5,12 @@ import json
 import re
 from html.parser import HTMLParser
 from pathlib import Path
-from urllib.parse import urlsplit
+from urllib.parse import unquote, urlsplit
 
 ROOT = Path(__file__).resolve().parent.parent
 config = json.loads((ROOT / 'vercel.json').read_text())
-headers = {h['key'].lower(): h['value'] for h in config['headers'][0]['headers']}
+global_headers = next(item for item in config['headers'] if item['source'] == '/(.*)')
+headers = {h['key'].lower(): h['value'] for h in global_headers['headers']}
 policy = dict((s.strip().split(' ', 1) + [''])[:2]
               for s in headers['content-security-policy'].split(';'))
 assert "'unsafe-inline'" not in policy['script-src']
@@ -31,7 +32,8 @@ class Resources(HTMLParser):
             resource = attrs.get('href')
         if resource:
             assert not urlsplit(resource).scheme and not resource.startswith('//'), resource
-            assert (ROOT / resource.split('?')[0]).is_file(), resource
+            path = (ROOT / unquote(urlsplit(resource).path).lstrip('/')).resolve()
+            assert path.is_relative_to(ROOT) and path.is_file(), resource
 
 
 pages = list(ROOT.glob('*.html'))
@@ -46,8 +48,8 @@ for page in pages:
 for css in ROOT.glob('*.css'):
     assert not re.search(r'@import|url\(\s*[\"\']?(?:https?:|//)', css.read_text()), css.name
 
-photo_headers = {h['key']: h['value'] for h in config['headers'][1]['headers']}
-assert config['headers'][1]['source'] == '/assets/projects/(.*)'
+photo_rule = next(item for item in config['headers'] if item['source'] == '/assets/projects/(.*)')
+photo_headers = {h['key']: h['value'] for h in photo_rule['headers']}
 assert photo_headers['Cross-Origin-Resource-Policy'] == 'same-origin'
 assert photo_headers['Access-Control-Allow-Origin'] == 'https://seacolpaintingllc.com'
 print(f'PASS: CSP permits all resources and inline data hashes across {len(pages)} pages; framing, script and photo policies are restricted.')
