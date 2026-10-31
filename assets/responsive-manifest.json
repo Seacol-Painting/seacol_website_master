@@ -8179,7 +8179,7 @@
         {
           "source": "assets/hero-kitchen.webp",
           "role": "hero",
-          "sizes": "100vw",
+          "sizes": "(max-width: 850px) 1440px, 100vw",
           "src": "assets/projects/responsive/hero-kitchen-3177de7bf2-1440.webp",
           "width": 1440,
           "height": 672,
@@ -8410,8 +8410,8 @@
         }
       ],
       "originalUniquePhotoBytes": 3525515,
-      "mobile1xPhotoBytes": 463494,
-      "mobile2xPhotoBytes": 1139162
+      "mobile1xPhotoBytes": 537662,
+      "mobile2xPhotoBytes": 1179302
     },
     "privacy.html": {
       "images": [],
