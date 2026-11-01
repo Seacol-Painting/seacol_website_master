@@ -16,7 +16,20 @@
   let submissionId;
 
   function message(text, state) {
-    status.textContent = text;
+    if (state === 'success') {
+      const eyebrow = document.createElement('span');
+      eyebrow.className = 'estimate-receipt-eyebrow';
+      eyebrow.textContent = 'Request received';
+      const title = document.createElement('h3');
+      title.className = 'estimate-receipt-title';
+      title.textContent = 'A beautiful space begins with your vision.';
+      const copy = document.createElement('p');
+      copy.className = 'estimate-receipt-copy';
+      copy.textContent = text;
+      status.replaceChildren(eyebrow, title, copy);
+    } else {
+      status.textContent = text;
+    }
     status.dataset.state = state;
     status.hidden = false;
     if (colorLab) colorLab.hidden = state !== 'success';
@@ -77,7 +90,7 @@
         throw new Error(text);
       }
       accepted = true;
-      message('Thank you for considering SEACOL. We’ve received your request and look forward to learning more about your project. We’ll be in touch soon.', 'success');
+      message('Thank you for considering SEACOL. We’ve received your request and look forward to exploring the possibilities with you. We’ll be in touch soon.', 'success');
       fields.hidden = true;
       submit.hidden = true;
       another.hidden = false;
@@ -97,6 +110,7 @@
       submit.disabled = accepted;
       submit.textContent = 'Send My Estimate Request';
       status.focus({ preventScroll: true });
+      if (accepted) status.scrollIntoView({ block: 'start', behavior: 'instant' });
     }
   });
 
