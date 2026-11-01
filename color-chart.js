@@ -17,6 +17,39 @@ const sherwin=[
 ['Rookwood Shutter Green','SW2809','#303B39'],['Rookwood Sash Green','SW2810','#506A67'],['Rookwood Dark Green','SW2816','#565C4A'],['Roycroft Bottle Green','SW2847','#324038'],['Sage Green Light','SW2851','#73705E']
 ].map(([name,code,hex])=>({name,code,hex,family:'Sherwin-Williams ColorSnap',brand:'Sherwin-Williams'}));
 
+const benjamin=[
+  ['White Dove','OC-17','#F0EEE6','Off White Collection'],
+  ['Dove Wing','OC-18','#E8E3D8','Off White Collection'],
+  ['Gray Mist','OC-30','#E4E1D7','Off White Collection'],
+  ['Edgecomb Gray','HC-173','#D4CFC4','Historical Colors'],
+  ['Revere Pewter','HC-172','#C6C0B4','Historical Colors'],
+  ['Thunder','AF-685','#B8B1A5','Affinity'],
+  ['Rockport Gray','HC-105','#A9A297','Historical Colors'],
+  ['Balboa Mist','OC-27','#DDD9D0','Off White Collection'],
+  ['Kendall Charcoal','HC-166','#686863','Historical Colors'],
+  ['Country Redwood','HC-183','#7A4741','Historical Colors'],
+  ['Swiss Coffee','OC-45','#EEE9DE','Off White Collection'],
+  ['Steam','AF-15','#E9E4D9','Affinity'],
+  ['Glacier White','OC-37','#F0EEE8','Off White Collection'],
+  ['Cloud White','OC-130','#F1ECE2','Off White Collection'],
+  ['Gray Owl','OC-52','#D4D5D0','Off White Collection'],
+  ['Hale Navy','HC-154','#3F4B56','Historical Colors'],
+  ['Silver Satin','OC-26','#DDDCD6','Off White Collection'],
+  ['Chelsea Gray','HC-168','#86857E','Historical Colors'],
+  ['White Heron','OC-57','#F4F2EA','Off White Collection'],
+  ['Cascade Mountains','862','#AAA999','Classic Colors'],
+  ['Paper White','OC-55','#E4E5E0','Off White Collection'],
+  ['Seattle Mist','1535','#C9C5B9','Classic Colors'],
+  ['Pale Oak','OC-20','#D8D1C6','Off White Collection'],
+  ['Sheep\'s Wool','857','#CEC8B8','Classic Colors'],
+  ['Shale','861','#B5B0A8','Classic Colors'],
+  ['Iron Mountain','2134-30','#5A5A57','Color Preview'],
+  ['Misty Air','OC-44','#E7E4DC','Off White Collection'],
+  ['Windham Cream','HC-6','#E9DDBD','Historical Colors'],
+  ['Rattan','AF-375','#C7AE83','Affinity'],
+  ['Soft Fern','2144-40','#A8AF98','Color Preview']
+].map(([name,code,hex,family])=>({name,code,hex,family,brand:'Benjamin Moore',previewOnly:true}));
+
 const ppg=[
 ['SIDINGSAFE Blue Puddle','PPG-SS-30','rgb(106,131,137)'],['SIDINGSAFE Dusty Blue','PPG-SS-29','rgb(123,143,153)'],['SIDINGSAFE Water Blue','PPG-SS-28','rgb(150,175,183)'],['SIDINGSAFE Dark Sky','PPG-SS-27','rgb(123,133,136)'],['SIDINGSAFE Stormy Blue','PPG-SS-26','rgb(173,182,185)'],['SIDINGSAFE Silver Sky Blue','PPG-SS-25','rgb(145,159,161)'],['SIDINGSAFE Storm Fog','PPG-SS-24','rgb(124,135,131)'],['SIDINGSAFE Sage Smoke','PPG-SS-23','rgb(137,146,138)'],['SIDINGSAFE Green Sage','PPG-SS-22','rgb(178,185,165)'],['SIDINGSAFE Gold','PPG-SS-21','rgb(211,183,139)'],['SIDINGSAFE Warm Ocher','PPG-SS-20','rgb(184,158,120)'],['SIDINGSAFE Mushroom Beige','PPG-SS-19','rgb(149,125,111)'],['SIDINGSAFE Pecan Brown','PPG-SS-18','rgb(171,147,120)'],['SIDINGSAFE Chestnut Gray','PPG-SS-17','rgb(145,142,140)'],['SIDINGSAFE Vintage Gray','PPG-SS-16','rgb(132,133,133)'],['SIDINGSAFE Dark Gray','PPG-SS-15','rgb(141,132,127)'],['SIDINGSAFE Stonework Gray','PPG-SS-14','rgb(189,193,193)'],['SIDINGSAFE Simply Slate','PPG-SS-13','rgb(183,185,181)'],['SIDINGSAFE Cozy Greige','PPG-SS-12','rgb(138,132,120)'],['SIDINGSAFE Fresh Greige','PPG-SS-11','rgb(177,170,156)'],['SIDINGSAFE Classic Greige','PPG-SS-10','rgb(175,171,163)'],['SIDINGSAFE Rock Path','PPG-SS-09','rgb(209,201,186)'],['SIDINGSAFE Creamy Greige','PPG-SS-08','rgb(176,169,157)'],['SIDINGSAFE Clean Greige','PPG-SS-07','rgb(209,204,194)'],['SIDINGSAFE Soft Brown','PPG-SS-06','rgb(142,132,117)'],['SIDINGSAFE Beige Suede','PPG-SS-05','rgb(199,184,164)'],['SIDINGSAFE Light Almond','PPG-SS-04','rgb(232,228,214)'],['SIDINGSAFE Warm White','PPG-SS-03','rgb(218,207,186)'],['SIDINGSAFE Pearl Willow','PPG-SS-02','rgb(231,230,224)'],['SIDINGSAFE Cotton White','PPG-SS-01','rgb(242,240,233)']
 ].map(([name,code,rgb])=>({name,code,family:'PPG SIDINGSAFE',hex:rgbToHex(rgb),brand:'PPG'}));
@@ -105,7 +138,7 @@ function render(){if(!state.original)return;const src=state.original,d=new Uint8
 function hexRgb(hex){const n=parseInt(hex.slice(1),16);return[(n>>16)&255,(n>>8)&255,n&255];}
 function renderSurfaceList(){els.surfaceList.innerHTML='';state.surfaces.forEach(s=>{const b=document.createElement('button');b.type='button';b.className='surface-button'+(s.id===state.activeSurface?' active':'');b.innerHTML=`<span>${s.name}</span><span>${s.color||'No color yet'}</span>`;b.onclick=()=>{state.activeSurface=s.id;renderSurfaceList();renderColors();};els.surfaceList.appendChild(b);});}
 function activeSurface(){return state.surfaces.find(s=>s.id===state.activeSurface);}
-function renderColors(){const q=$('#color-search').value.trim().toLowerCase();let colors=state.catalog==='ppg'?ppg:state.catalog==='sherwin'?sherwin:seacolColors;els.brandNotice.hidden=true;if(state.catalog==='brands'){els.colorGrid.innerHTML='';els.colorCount.textContent='Official palette source';els.brandNotice.hidden=false;els.brandNotice.innerHTML='Benjamin Moore publishes official downloadable palettes for design software. This app will not fabricate RGB/HEX values from screenshots. Use the official palette link below while SEACOL prepares a verified parser for the manufacturer file.';return;}if(q)colors=colors.filter(c=>(c.name+' '+c.code+' '+c.family+' '+c.hex).toLowerCase().includes(q));els.colorCount.textContent=`${colors.length} colors`;els.colorGrid.innerHTML='';colors.forEach(c=>{const b=document.createElement('button');b.className='swatch';b.type='button';b.title=`${c.name} ${c.code}`;b.innerHTML=`<div class="swatch-color" style="background:${c.hex}"></div><strong>${c.name}</strong><small>${c.code} · ${c.hex.toUpperCase()}</small>`;b.onclick=()=>applyColor(c.hex,c.name,c.code);els.colorGrid.appendChild(b);});}
+function renderColors(){const q=$('#color-search').value.trim().toLowerCase();let colors=state.catalog==='ppg'?ppg:state.catalog==='sherwin'?sherwin:state.catalog==='benjamin'?benjamin:seacolColors;els.brandNotice.hidden=true;if(state.catalog==='benjamin'){els.brandNotice.hidden=false;els.brandNotice.textContent='Benjamin Moore names and codes are official. The displayed swatches are SEACOL screen previews for visualization only, not manufacturer-certified HEX values.';}if(q)colors=colors.filter(c=>(c.name+' '+c.code+' '+c.family+' '+c.hex).toLowerCase().includes(q));els.colorCount.textContent=`${colors.length} colors`;els.colorGrid.innerHTML='';colors.forEach(c=>{const b=document.createElement('button');b.className='swatch';b.type='button';b.title=`${c.name} ${c.code}`;b.innerHTML=`<div class="swatch-color" style="background:${c.hex}"></div><strong>${c.name}</strong><small>${c.code}${c.previewOnly?' · screen preview':' · '+c.hex.toUpperCase()}</small>`;b.onclick=()=>applyColor(c.hex,c.name,c.code);els.colorGrid.appendChild(b);});}
 function applyColor(hex,name='Custom color',code=hex.toUpperCase()){const s=activeSurface();if(!s){els.aiStatus.textContent='Choose a detected surface first.';return;}s.color=hex;s.colorName=name;s.colorCode=code;state.color=hex;renderSurfaceList();render();updateSummary();}
 function updateSummary(){const chosen=state.surfaces.filter(s=>s.color);$('#selection-summary').textContent=chosen.length?chosen.map(s=>`${s.name}: ${s.colorName||s.color} (${s.colorCode||s.color})`).join(' · '):'Choose a surface and color to begin.';}
 function resetProject(){state.surfaces.forEach(s=>{s.color=null;delete s.colorName;delete s.colorCode});renderSurfaceList();render();updateSummary();}
