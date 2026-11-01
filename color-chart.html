@@ -62,6 +62,8 @@
         <div class="viewer-actions">
           <button id="find-walls" class="primary" type="button">Find my walls with AI</button>
           <button id="show-original" class="secondary" type="button">Hold to see original</button>
+          <button id="rotate-photo" class="secondary" type="button">Rotate photo</button>
+          <button id="retake-photo" class="secondary" type="button">Retake</button>
         </div>
         <p id="ai-status" class="microcopy" role="status">Capture or choose a photo, then let Color Chart identify paintable surfaces.</p>
       </div>
@@ -86,17 +88,16 @@
       <div class="panel color-panel">
         <p class="step">03 · COLOR</p>
         <div class="color-title-row">
-          <h2>Explore color</h2>
+          <h2>Choose a paint brand & color</h2>
           <span id="color-count"></span>
         </div>
-        <div class="catalog-tabs" role="tablist">
-          <button class="catalog-tab active" data-catalog="seacol" type="button">SEACOL Spectrum</button>
-          <button class="catalog-tab" data-catalog="sherwin" type="button">Sherwin-Williams verified</button>
-          <button class="catalog-tab" data-catalog="ppg" type="button">PPG verified</button>
-          <button class="catalog-tab" data-catalog="benjamin" type="button">Benjamin Moore</button>
+        <div class="brand-selector" role="tablist" aria-label="Choose a paint brand">
+          <button class="brand-card active" data-catalog="sherwin" type="button"><span class="brand-mark sw-mark">SW</span><span>Sherwin-Williams</span></button>
+          <button class="brand-card" data-catalog="benjamin" type="button"><span class="brand-mark bm-mark">BM</span><span>Benjamin Moore</span></button>
+          <button class="brand-card" data-catalog="ppg" type="button"><span class="brand-mark ppg-mark">PPG</span><span>PPG</span></button>
         </div>
         <div class="search-row">
-          <input id="color-search" type="search" placeholder="Search color, family, code or HEX" aria-label="Search colors">
+          <input id="color-search" type="search" placeholder="Search color name or code" aria-label="Search colors">
           <input id="custom-color" type="color" value="#9b91a1" aria-label="Choose any custom color">
         </div>
         <div id="brand-notice" class="brand-notice" hidden></div>

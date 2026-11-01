@@ -75,3 +75,90 @@
   }
   .shutter{width:58px;height:58px;padding:6px}
 }
+
+/* Camera-first redesign: maximize useful capture area and support portrait/landscape naturally. */
+.studio{padding:20px 14px}
+.capture-card{min-height:300px;padding:26px 18px}
+.camera-shell{border-radius:14px;overflow:hidden}
+.camera-shell video{
+  width:100%;
+  height:auto;
+  min-height:0;
+  max-height:none;
+  aspect-ratio:auto;
+  object-fit:contain;
+  background:#000;
+}
+.camera-frame{display:none}
+.camera-actions{
+  grid-template-columns:minmax(72px,1fr) auto minmax(72px,1fr);
+  padding:10px 12px 12px;
+  gap:10px;
+}
+.viewer{
+  border-radius:12px;
+  background:#05090c;
+}
+.viewer canvas{
+  width:100%;
+  height:auto;
+  max-height:none;
+  object-fit:contain;
+}
+.viewer-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+.viewer-actions .primary{grid-column:1/-1}
+.brand-selector{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+  margin:14px 0 16px;
+}
+.brand-card{
+  min-width:0;
+  border:1px solid #d3cec4;
+  border-radius:16px;
+  background:#faf8f3;
+  padding:14px 10px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:8px;
+  color:#24313a;
+  font-weight:700;
+  font-size:12px;
+  text-align:center;
+}
+.brand-card.active{
+  border-color:#b8954f;
+  box-shadow:inset 0 0 0 1px #b8954f;
+  background:#fffaf0;
+}
+.brand-mark{
+  width:46px;height:46px;border-radius:12px;display:grid;place-items:center;
+  font-weight:900;letter-spacing:.03em;border:1px solid rgba(0,0,0,.08);
+}
+.sw-mark{background:#1b4d8c;color:white}
+.bm-mark{background:#efe8dc;color:#24201d}
+.ppg-mark{background:#1f5a9b;color:white}
+@media(max-width:820px){
+  .studio{margin-left:6px;margin-right:6px;padding:14px 8px}
+  .camera-shell video{width:100%;max-height:none}
+  .viewer canvas{max-height:none}
+  .brand-selector{gap:8px}
+  .brand-card{padding:12px 6px;font-size:11px}
+}
+@media(max-width:440px){
+  .studio{margin-left:0;margin-right:0;border-radius:0;padding:10px 6px}
+  .capture-card{border-radius:12px}
+  .camera-shell{border-radius:8px}
+  .camera-actions{padding:8px;gap:8px}
+  .viewer-actions{grid-template-columns:1fr}
+  .viewer-actions .primary{grid-column:auto}
+  .brand-selector{grid-template-columns:1fr 1fr 1fr}
+  .brand-mark{width:40px;height:40px;font-size:11px}
+  .brand-card{font-size:10px;line-height:1.2}
+}
