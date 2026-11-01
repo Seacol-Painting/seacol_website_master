@@ -6,6 +6,7 @@
   const fields = document.querySelector('#estimate-fields');
   const submit = document.querySelector('#estimate-submit');
   const status = document.querySelector('#estimate-status');
+  const colorLab = document.querySelector('#estimate-color-lab');
   const another = document.querySelector('#estimate-another');
   const fallback = document.querySelector('#request-options');
   const copyStatus = document.querySelector('#copy-status');
@@ -18,6 +19,7 @@
     status.textContent = text;
     status.dataset.state = state;
     status.hidden = false;
+    if (colorLab) colorLab.hidden = state !== 'success';
   }
   function showFallback(data) {
     const request = prepareEstimateRequest(data);
@@ -108,6 +110,7 @@
     submit.disabled = false;
     another.hidden = true;
     status.hidden = true;
+    if (colorLab) colorLab.hidden = true;
     clearFallback();
     form.querySelector('[name="name"]').focus();
   });
