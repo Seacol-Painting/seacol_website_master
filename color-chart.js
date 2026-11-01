@@ -7,12 +7,72 @@ const els={captureCard:$('#capture-card'),cameraShell:$('#camera-shell'),camera:
 function hslToHex(h,s,l){s/=100;l/=100;const k=n=>(n+h/30)%12,a=s*Math.min(l,1-l),f=n=>l-a*Math.max(-1,Math.min(k(n)-3,Math.min(9-k(n),1)));return '#'+[f(0),f(8),f(4)].map(x=>Math.round(255*x).toString(16).padStart(2,'0')).join('');}
 const families=[['Warm Neutrals',38,18,91],['Ivory & White',45,18,96],['Greige',32,9,73],['Cool Gray',205,8,70],['Charcoal',205,8,27],['Sage',92,18,55],['Forest',126,27,31],['Blue',210,34,49],['Navy',218,40,28],['Aqua',178,28,53],['Terracotta',18,42,54],['Rose',350,29,60],['Wine',347,35,32],['Ochre',41,52,54]];
 const seacolColors=[];families.forEach(([family,h,s,l],fi)=>{for(let i=0;i<28;i++){const dh=((i%7)-3)*3,ds=((Math.floor(i/7)%4)-1.5)*5,dl=(Math.floor(i/4)-3)*3.2;seacolColors.push({name:`${family} ${String(i+1).padStart(2,'0')}`,code:`SC-${String(fi+1).padStart(2,'0')}${String(i+1).padStart(2,'0')}`,family,hex:hslToHex((h+dh+360)%360,Math.max(3,Math.min(75,s+ds)),Math.max(12,Math.min(97,l+dl)))})}});
+const sherwin=[
+['Mulberry Silk','SW0001','#94766C'],['Chelsea Mauve','SW0002','#BEAC9F'],['Cabbage Rose','SW0003','#C59F91'],['Rose Brocade','SW0004','#996C6E'],['Deepest Mauve','SW0005','#6D595A'],['Toile Red','SW0006','#8B534E'],['Decorous Amber','SW0007','#AC7559'],['Cajun Red','SW0008','#8D422F'],['Eastlake Gold','SW0009','#C28E61'],['Wickerwork','SW0010','#C19E80'],['Crewel Tan','SW0011','#CBB99B'],['Empire Gold','SW0012','#C19F6E'],['Majolica Green','SW0013','#AEB08F'],['Sheraton Sage','SW0014','#8F8666'],['Gallery Green','SW0015','#708672'],['Billiard Green','SW0016','#45584D'],['Calico','SW0017','#8CA49C'],['Teal Stencil','SW0018','#627F7B'],['Festoon Aqua','SW0019','#A0BBB8'],['Peacock Plume','SW0020','#739694'],['Queen Anne Lilac','SW0021','#C0B6B4'],['Patchwork Plum','SW0022','#7E696A'],
+['Sea Salt','SW6204','#CDD2CA'],['Comfort Gray','SW6205','#BEC3BB'],['Rainwashed','SW6211','#C2CDC5'],['Tradewind','SW6218','#C2CFCF'],['Riverway','SW6222','#5D7274'],['Naval','SW6244','#2F3D4C'],['Ice Cube','SW6252','#E3E4E1'],['Olympus White','SW6253','#D4D8D7'],['Lazy Gray','SW6254','#BEC1C3'],
+['Enticing Red','SW6600','#B74E4F'],['Youthful Coral','SW6604','#F0AFA8'],['Emberglow','SW6627','#D67C56'],['Copper Harbor','SW6634','#D57E52'],['Tangerine','SW6640','#F2AC78'],
+['Network Gray','SW7073','#A0A5A7'],['Software','SW7074','#7F8486'],['Web Gray','SW7075','#616669'],['Cyberspace','SW7076','#44484D'],['Arcade White','SW7100','#F3EEE7'],['White Flour','SW7102','#F4EFE5'],['Whitetail','SW7103','#F4EFE4'],['Cotton White','SW7104','#F7EFE3'],['Paperwhite','SW7105','#F7EFDE'],
+['Threshold Taupe','SW7501','#AC9A8A'],['Sticks & Stones','SW7503','#A49689'],['Keystone Gray','SW7504','#9E9284'],['Loggia','SW7506','#C4B7A5'],['Bungalow Beige','SW7511','#CDBFB0'],['Windsor Greige','SW7528','#C4B49C'],['Canvas Tan','SW7531','#DCD1BF'],
+['After the Rain','SW9047','#8BC4D1'],["Surfin'",'SW9048','#73C0D2'],['Vintage Vessel','SW9050','#94B2A6'],['Aquaverde','SW9051','#A3C0BD'],['Little Boy Blu','SW9054','#C7D8DB'],['Porch Ceiling','SW9063','#9BC8DE'],["Dyer's Woad",'SW9071','#7B99B0'],['Redend Point','SW9081','#AE8E7E'],['Touch of Sand','SW9085','#D5C7BA'],['Playa Arenosa','SW9094','#DCC7B3'],['Natural Linen','SW9109','#DFD3C3'],
+['Rookwood Shutter Green','SW2809','#303B39'],['Rookwood Sash Green','SW2810','#506A67'],['Rookwood Dark Green','SW2816','#565C4A'],['Roycroft Bottle Green','SW2847','#324038'],['Sage Green Light','SW2851','#73705E']
+].map(([name,code,hex])=>({name,code,hex,family:'Sherwin-Williams ColorSnap',brand:'Sherwin-Williams'}));
+
 const ppg=[
 ['SIDINGSAFE Blue Puddle','PPG-SS-30','rgb(106,131,137)'],['SIDINGSAFE Dusty Blue','PPG-SS-29','rgb(123,143,153)'],['SIDINGSAFE Water Blue','PPG-SS-28','rgb(150,175,183)'],['SIDINGSAFE Dark Sky','PPG-SS-27','rgb(123,133,136)'],['SIDINGSAFE Stormy Blue','PPG-SS-26','rgb(173,182,185)'],['SIDINGSAFE Silver Sky Blue','PPG-SS-25','rgb(145,159,161)'],['SIDINGSAFE Storm Fog','PPG-SS-24','rgb(124,135,131)'],['SIDINGSAFE Sage Smoke','PPG-SS-23','rgb(137,146,138)'],['SIDINGSAFE Green Sage','PPG-SS-22','rgb(178,185,165)'],['SIDINGSAFE Gold','PPG-SS-21','rgb(211,183,139)'],['SIDINGSAFE Warm Ocher','PPG-SS-20','rgb(184,158,120)'],['SIDINGSAFE Mushroom Beige','PPG-SS-19','rgb(149,125,111)'],['SIDINGSAFE Pecan Brown','PPG-SS-18','rgb(171,147,120)'],['SIDINGSAFE Chestnut Gray','PPG-SS-17','rgb(145,142,140)'],['SIDINGSAFE Vintage Gray','PPG-SS-16','rgb(132,133,133)'],['SIDINGSAFE Dark Gray','PPG-SS-15','rgb(141,132,127)'],['SIDINGSAFE Stonework Gray','PPG-SS-14','rgb(189,193,193)'],['SIDINGSAFE Simply Slate','PPG-SS-13','rgb(183,185,181)'],['SIDINGSAFE Cozy Greige','PPG-SS-12','rgb(138,132,120)'],['SIDINGSAFE Fresh Greige','PPG-SS-11','rgb(177,170,156)'],['SIDINGSAFE Classic Greige','PPG-SS-10','rgb(175,171,163)'],['SIDINGSAFE Rock Path','PPG-SS-09','rgb(209,201,186)'],['SIDINGSAFE Creamy Greige','PPG-SS-08','rgb(176,169,157)'],['SIDINGSAFE Clean Greige','PPG-SS-07','rgb(209,204,194)'],['SIDINGSAFE Soft Brown','PPG-SS-06','rgb(142,132,117)'],['SIDINGSAFE Beige Suede','PPG-SS-05','rgb(199,184,164)'],['SIDINGSAFE Light Almond','PPG-SS-04','rgb(232,228,214)'],['SIDINGSAFE Warm White','PPG-SS-03','rgb(218,207,186)'],['SIDINGSAFE Pearl Willow','PPG-SS-02','rgb(231,230,224)'],['SIDINGSAFE Cotton White','PPG-SS-01','rgb(242,240,233)']
 ].map(([name,code,rgb])=>({name,code,family:'PPG SIDINGSAFE',hex:rgbToHex(rgb),brand:'PPG'}));
+ppg.push(
+  {name:'Artifact',code:'PPG10-16',family:'PPG verified',hex:'#69808B',brand:'PPG'},
+  {name:'Night Watch',code:'PPG1145-7',family:'PPG verified',hex:'#3C504F',brand:'PPG'},
+  {name:'Whiskers',code:'PPG1025-3',family:'PPG verified',hex:'#D1CCC2',brand:'PPG'},
+  {name:'Mesa Red',code:'PPG1052-6',family:'PPG verified',hex:'#92555B',brand:'PPG'},
+  {name:'Universal Grey',code:'00NN 62/000',family:'PPG verified',hex:'#CFced0'.toUpperCase(),brand:'PPG'},
+  {name:'Improbable',code:'PPG1011-5',family:'PPG verified',hex:'#6E7376',brand:'PPG'},
+  {name:'Legendary',code:'PPG1019-3',family:'PPG verified',hex:'#C6BAAF',brand:'PPG'},
+  {name:'Off White',code:'PPG1024-1',family:'PPG verified',hex:'#E8E4D6',brand:'PPG'},
+  {name:'El Capitan',code:'PPG1020-4',family:'PPG verified',hex:'#B7A696',brand:'PPG'},
+  {name:'Dover Gray',code:'PPG1001-5',family:'PPG verified',hex:'#848585',brand:'PPG'},
+  {name:'Accolade',code:'PPG1208-1',family:'PPG verified',hex:'#F1EEE2',brand:'PPG'},
+  {name:'Just Gorgeous',code:'PPG1047-3',family:'PPG verified',hex:'#D6C4C1',brand:'PPG'},
+  {name:'Sonata',code:'PPG1157-3',family:'PPG verified',hex:'#ABC8D8',brand:'PPG'}
+);
 function rgbToHex(rgb){const m=rgb.match(/\d+/g).map(Number);return '#'+m.map(v=>v.toString(16).padStart(2,'0')).join('');}
 function stopCamera(){if(state.stream){state.stream.getTracks().forEach(t=>t.stop());state.stream=null;}els.camera.srcObject=null;}
-async function openCamera(){try{stopCamera();state.stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:state.facing},width:{ideal:1920},height:{ideal:1080}},audio:false});els.camera.srcObject=state.stream;els.captureCard.hidden=true;els.cameraShell.hidden=false;$('#camera-status').textContent='';}catch(err){$('#camera-status').textContent=err?.name==='NotAllowedError'?'Camera permission was not granted. You can still choose a photo.':'Camera could not be opened. Try choosing a photo instead.';}}
+async function openCamera(){
+  const status=$('#camera-status');
+  if(!navigator.mediaDevices?.getUserMedia){
+    status.textContent='This browser does not expose camera access here. Try opening Color Chart in Chrome or Safari, or choose a photo instead.';
+    return;
+  }
+  stopCamera();
+  status.textContent='Requesting camera access…';
+  let firstError=null;
+  try{
+    try{
+      state.stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:state.facing},width:{ideal:1920},height:{ideal:1080}},audio:false});
+    }catch(err){
+      firstError=err;
+      if(['OverconstrainedError','NotFoundError','NotReadableError','TypeError'].includes(err?.name)){
+        state.stream=await navigator.mediaDevices.getUserMedia({video:true,audio:false});
+      }else throw err;
+    }
+    els.camera.srcObject=state.stream;
+    await els.camera.play().catch(()=>{});
+    els.captureCard.hidden=true;
+    els.cameraShell.hidden=false;
+    status.textContent='';
+  }catch(err){
+    console.error('Camera access failed',firstError||err,err);
+    if(err?.name==='NotAllowedError'||err?.name==='SecurityError'){
+      status.textContent='Camera access is blocked. Allow camera permission for seacolpaintingllc.com in your browser, then try again. You can also choose a photo.';
+    }else if(err?.name==='NotFoundError'){
+      status.textContent='No usable camera was found on this device. You can choose a photo instead.';
+    }else if(err?.name==='NotReadableError'){
+      status.textContent='The camera is being used by another app or could not start. Close other camera apps and try again.';
+    }else{
+      status.textContent='Camera could not be opened on this device. Try again or choose a photo instead.';
+    }
+  }
+}
 function setImageFromCanvas(canvas){const max=1400,scale=Math.min(1,max/canvas.width);const w=Math.max(1,Math.round(canvas.width*scale)),h=Math.max(1,Math.round(canvas.height*scale));els.preview.width=w;els.preview.height=h;els.ctx.drawImage(canvas,0,0,w,h);state.original=els.ctx.getImageData(0,0,w,h);state.image=state.original;state.surfaces=[];state.activeSurface=null;els.cameraShell.hidden=true;els.captureCard.hidden=true;els.workspace.hidden=false;els.controls.hidden=true;$('#selection').hidden=true;$('#new-view').hidden=false;stopCamera();render();}
 function capture(){if(!els.camera.videoWidth)return;const c=document.createElement('canvas');c.width=els.camera.videoWidth;c.height=els.camera.videoHeight;c.getContext('2d').drawImage(els.camera,0,0);setImageFromCanvas(c);}
 function loadFile(file){if(!file||!file.type.startsWith('image/'))return;const img=new Image();img.onload=()=>{const c=document.createElement('canvas');c.width=img.naturalWidth;c.height=img.naturalHeight;c.getContext('2d').drawImage(img,0,0);setImageFromCanvas(c);URL.revokeObjectURL(img.src)};img.src=URL.createObjectURL(file);}
@@ -24,7 +84,7 @@ function render(){if(!state.original)return;const src=state.original,d=new Uint8
 function hexRgb(hex){const n=parseInt(hex.slice(1),16);return[(n>>16)&255,(n>>8)&255,n&255];}
 function renderSurfaceList(){els.surfaceList.innerHTML='';state.surfaces.forEach(s=>{const b=document.createElement('button');b.type='button';b.className='surface-button'+(s.id===state.activeSurface?' active':'');b.innerHTML=`<span>${s.name}</span><span>${s.color||'No color yet'}</span>`;b.onclick=()=>{state.activeSurface=s.id;renderSurfaceList();renderColors();};els.surfaceList.appendChild(b);});}
 function activeSurface(){return state.surfaces.find(s=>s.id===state.activeSurface);}
-function renderColors(){const q=$('#color-search').value.trim().toLowerCase();let colors=state.catalog==='ppg'?ppg:seacolColors;els.brandNotice.hidden=true;if(state.catalog==='brands'){els.colorGrid.innerHTML='';els.colorCount.textContent='Official references';els.brandNotice.hidden=false;els.brandNotice.innerHTML='Sherwin-Williams and Benjamin Moore publish thousands of colors, but Color Chart will not invent screen RGB values. Use the official catalog links below while SEACOL imports verified digital mappings.';return;}if(q)colors=colors.filter(c=>(c.name+' '+c.code+' '+c.family+' '+c.hex).toLowerCase().includes(q));els.colorCount.textContent=`${colors.length} colors`;els.colorGrid.innerHTML='';colors.forEach(c=>{const b=document.createElement('button');b.className='swatch';b.type='button';b.title=`${c.name} ${c.code}`;b.innerHTML=`<div class="swatch-color" style="background:${c.hex}"></div><strong>${c.name}</strong><small>${c.code} · ${c.hex.toUpperCase()}</small>`;b.onclick=()=>applyColor(c.hex,c.name,c.code);els.colorGrid.appendChild(b);});}
+function renderColors(){const q=$('#color-search').value.trim().toLowerCase();let colors=state.catalog==='ppg'?ppg:state.catalog==='sherwin'?sherwin:seacolColors;els.brandNotice.hidden=true;if(state.catalog==='brands'){els.colorGrid.innerHTML='';els.colorCount.textContent='Official palette source';els.brandNotice.hidden=false;els.brandNotice.innerHTML='Benjamin Moore publishes official downloadable palettes for design software. This app will not fabricate RGB/HEX values from screenshots. Use the official palette link below while SEACOL prepares a verified parser for the manufacturer file.';return;}if(q)colors=colors.filter(c=>(c.name+' '+c.code+' '+c.family+' '+c.hex).toLowerCase().includes(q));els.colorCount.textContent=`${colors.length} colors`;els.colorGrid.innerHTML='';colors.forEach(c=>{const b=document.createElement('button');b.className='swatch';b.type='button';b.title=`${c.name} ${c.code}`;b.innerHTML=`<div class="swatch-color" style="background:${c.hex}"></div><strong>${c.name}</strong><small>${c.code} · ${c.hex.toUpperCase()}</small>`;b.onclick=()=>applyColor(c.hex,c.name,c.code);els.colorGrid.appendChild(b);});}
 function applyColor(hex,name='Custom color',code=hex.toUpperCase()){const s=activeSurface();if(!s){els.aiStatus.textContent='Choose a detected surface first.';return;}s.color=hex;s.colorName=name;s.colorCode=code;state.color=hex;renderSurfaceList();render();updateSummary();}
 function updateSummary(){const chosen=state.surfaces.filter(s=>s.color);$('#selection-summary').textContent=chosen.length?chosen.map(s=>`${s.name}: ${s.colorName||s.color} (${s.colorCode||s.color})`).join(' · '):'Choose a surface and color to begin.';}
 function resetProject(){state.surfaces.forEach(s=>{s.color=null;delete s.colorName;delete s.colorCode});renderSurfaceList();render();updateSummary();}
