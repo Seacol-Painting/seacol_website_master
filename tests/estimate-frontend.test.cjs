@@ -46,17 +46,18 @@ function fixture({ valid = true, present = true } = {}) {
     return node;
   }
 
-  for (const id of ['estimate-form', 'estimate-fields', 'estimate-submit', 'estimate-status',
+  for (const id of ['estimate-form', 'estimate-fields', 'estimate-submit', 'estimate-status', 'estimate-color-lab',
     'estimate-another', 'request-options', 'copy-status', 'send-email', 'send-text',
     'request-preview', 'copy-request']) nodes.set(`#${id}`, element(id));
   const form = nodes.get('#estimate-form');
   const fields = nodes.get('#estimate-fields');
   const submit = nodes.get('#estimate-submit');
   const status = nodes.get('#estimate-status');
+  const colorLab = nodes.get('#estimate-color-lab');
   const another = nodes.get('#estimate-another');
   const fallback = nodes.get('#request-options');
   submit.disabled = true;
-  status.hidden = another.hidden = fallback.hidden = true;
+  status.hidden = colorLab.hidden = another.hidden = fallback.hidden = true;
   const inputs = new Map(Object.keys(values).map((name) => [name, element(name)]));
   form.reportValidity = () => valid;
   form.querySelector = (selector) => inputs.get(selector.match(/^\[name="([^\"]+)"\]$/)?.[1]) || null;
@@ -114,7 +115,7 @@ function fixture({ valid = true, present = true } = {}) {
   vm.runInContext(siteSource, context, { filename: 'script.js' });
   vm.runInContext(estimateSource, context, { filename: 'estimate.js' });
   return {
-    values, requests, events, timers, document, form, fields, submit, status, another, fallback, nodes,
+    values, requests, events, timers, document, form, fields, submit, status, colorLab, another, fallback, nodes,
     send: () => form.emit('submit'),
     anotherRequest: () => another.emit('click'),
     async edit(name, value) { values[name] = value; await form.emit('input', { target: inputs.get(name) }); },
@@ -131,6 +132,7 @@ function fixture({ valid = true, present = true } = {}) {
 
 function assertRecoverable(f) {
   assert.equal(f.status.dataset.state, 'error');
+  assert.equal(f.colorLab.hidden, true);
   assert.equal(f.fields.hidden, false);
   assert.equal(f.fields.disabled, false);
   assert.equal(f.submit.hidden, false);
@@ -163,6 +165,7 @@ test('a double submit while pending sends one request and locks the fields', asy
   assert.equal(f.fields.disabled, true);
   assert.equal(f.form.attrs['aria-busy'], 'true');
   assert.equal(f.status.dataset.state, 'pending');
+  assert.equal(f.colorLab.hidden, true);
   assert.equal(f.requests[0].url, '/api/estimate');
   assert.equal(f.requests[0].options.method, 'POST');
   assert.equal(f.requests[0].options.credentials, 'same-origin');
@@ -222,6 +225,7 @@ test('a durable 201 acknowledgement confirms receipt without exposing its refere
   f.requests[0].respond(201, { ok: true, reference: 'SC-20261031-ACCEPTED' }); await pending;
   assert.equal(f.status.dataset.state, 'success');
   assert.doesNotMatch(f.status.textContent, /SC-[A-Z0-9-]+|Reference:/i);
+  assert.equal(f.colorLab.hidden, false);
   assert.equal(f.fields.hidden, true);
   assert.equal(f.submit.hidden, true);
   assert.equal(f.submit.disabled, true);
@@ -244,6 +248,7 @@ test('an acknowledged duplicate shows success without counting a second conversi
   f.requests[0].respond(200, { ok: true, reference: 'SC-20261031-EXISTING', duplicate: true }); await pending;
   assert.equal(f.status.dataset.state, 'success');
   assert.doesNotMatch(f.status.textContent, /SC-[A-Z0-9-]+|Reference:/i);
+  assert.equal(f.colorLab.hidden, false);
   assert.equal(f.fields.hidden, true);
   assert.equal(f.events.length, 0);
 });
@@ -290,6 +295,7 @@ test('sending another request resets the UI, data and UUID even for identical ne
   assert.equal(f.submit.disabled, false);
   assert.equal(f.another.hidden, true);
   assert.equal(f.status.hidden, true);
+  assert.equal(f.colorLab.hidden, true);
   assert.equal(f.fallback.hidden, true);
   assert.equal(f.nodes.get('#request-preview').value, '');
   assert.equal(f.nodes.get('#send-email').href, 'mailto:info@seacolpaintingllc.com');

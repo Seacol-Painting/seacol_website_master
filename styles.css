@@ -68,8 +68,9 @@
 }
 
 /* Accessible direct estimate form, with visible receipt and retry states. */
+#estimate-form{align-content:start;align-self:start}
 .estimate-fields{border:0;padding:0;margin:0;min-width:0;display:grid;grid-template-columns:1fr 1fr;gap:20px}
-.estimate-fields[hidden],.estimate-status[hidden],#estimate-submit[hidden],#estimate-another[hidden]{display:none!important}
+.estimate-fields[hidden],.estimate-status[hidden],.estimate-color-lab[hidden],#estimate-submit[hidden],#estimate-another[hidden]{display:none!important}
 .visually-hidden,.estimate-honeypot{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .estimate-consent{flex-direction:row;align-items:flex-start;gap:10px;font-size:12px;font-weight:400;line-height:1.6}
 .estimate-consent input{width:18px;height:18px;flex:none;margin:2px 0 0;accent-color:var(--navy)}
@@ -80,4 +81,8 @@
 .estimate-status:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
 #estimate-submit:disabled{cursor:wait;opacity:.7;transform:none}
 #estimate-another{border-color:var(--gold);background:var(--ivory);color:var(--navy)}
+.estimate-color-lab{border:1px solid var(--line);border-radius:12px;background:var(--ivory);padding:20px}
+.estimate-color-lab h3{margin:0;color:var(--navy);font-size:22px;line-height:1.3}
+.estimate-color-lab p{margin:10px 0 18px;color:var(--muted);font-size:14px;line-height:1.6}
+.estimate-color-lab .button{display:flex;width:100%;gap:8px;line-height:1.4;white-space:normal}
 @media(max-width:560px){.estimate-fields{grid-template-columns:1fr}}
