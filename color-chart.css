@@ -6,3 +6,72 @@
 
 
 .swatch:focus-visible,.catalog-tab:focus-visible{outline:3px solid #b5954d;outline-offset:2px}.brand-notice{line-height:1.55}
+
+/* Camera controls: keep actions in their own mobile-safe bar below the preview. */
+.camera-shell{
+  display:grid;
+  grid-template-rows:minmax(0,1fr) auto;
+  aspect-ratio:auto;
+  min-height:0;
+  background:#020303;
+}
+.camera-shell video{
+  grid-row:1;
+  width:100%;
+  height:auto;
+  max-height:68vh;
+  min-height:320px;
+  object-fit:cover;
+}
+.camera-frame{
+  grid-row:1;
+  inset:7% 7% calc(7% + 84px) 7%;
+}
+.camera-actions{
+  position:static;
+  grid-row:2;
+  left:auto;
+  right:auto;
+  bottom:auto;
+  display:grid;
+  grid-template-columns:minmax(76px,1fr) auto minmax(76px,1fr);
+  align-items:center;
+  gap:14px;
+  width:100%;
+  padding:14px 16px 16px;
+  background:linear-gradient(180deg,#0b1116,#070b0e);
+  border-top:1px solid rgba(255,255,255,.12);
+}
+.camera-actions .ghost{
+  width:100%;
+  min-width:0;
+  min-height:44px;
+  padding:10px 12px;
+  white-space:nowrap;
+}
+.shutter{
+  width:64px;
+  height:64px;
+  flex:none;
+}
+@media(max-width:820px){
+  .camera-shell{aspect-ratio:auto}
+  .camera-shell video{min-height:360px;max-height:66vh}
+  .camera-frame{inset:6% 6% calc(6% + 82px) 6%}
+  .camera-actions{gap:10px;padding:12px}
+  .camera-actions .ghost{font-size:13px}
+}
+@media(max-width:420px){
+  .camera-shell video{min-height:330px;max-height:62vh}
+  .camera-actions{
+    grid-template-columns:minmax(68px,1fr) 58px minmax(68px,1fr);
+    gap:8px;
+    padding:10px;
+  }
+  .camera-actions .ghost{
+    min-height:42px;
+    padding:9px 8px;
+    font-size:12px;
+  }
+  .shutter{width:58px;height:58px;padding:6px}
+}
