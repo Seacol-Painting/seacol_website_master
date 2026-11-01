@@ -15,7 +15,7 @@ if (result.error || result.status !== 0) {
   process.exit(result.status || 1);
 }
 
-const browserScripts = new Set(['script.js', 'analytics.js', 'estimate.js']);
+const browserScripts = new Set(['script.js', 'analytics.js', 'estimate.js', 'color-chart.js']);
 const publicFiles = fs.readdirSync(root).filter(name => /\.(?:html|css)$/.test(name) || browserScripts.has(name));
 publicFiles.push('robots.txt', 'sitemap.xml');
 // New browser code must be added explicitly, so server utilities cannot become public.
