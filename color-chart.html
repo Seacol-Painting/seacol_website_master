@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>SEACOL Color Chart | Visualize Paint Colors in Your Space</title>
+  <link rel="canonical" href="https://seacolpaintingllc.com/color-chart">
+  <meta name="description" content="Use your camera or a photo to let SEACOL Color Chart identify paintable surfaces and preview hundreds of colors in your own space.">
+  <meta name="theme-color" content="#0d151c">
+  <link rel="icon" type="image/png" sizes="64x64" href="assets/seacol-favicon.png">
+  <link rel="stylesheet" href="color-chart.css?v=1">
+</head>
+<body>
+  <header class="cc-header">
+    <a class="cc-brand" href="/" aria-label="Back to SEACOL Painting">
+      <img src="assets/seacol-horizontal-matte-288.webp" width="288" height="144" alt="SEACOL Painting">
+    </a>
+    <span>COLOR CHART <b>AI</b></span>
+  </header>
+
+  <main>
+    <section class="cc-hero">
+      <p class="eyebrow">YOUR SPACE · YOUR COLOR</p>
+      <h1>See the room.<br><em>Then see the possibility.</em></h1>
+      <p>Color Chart uses on-device AI to identify walls and other surfaces so you can explore color without tracing every edge by hand.</p>
+      <div class="privacy-chip">AI runs in your browser · Your room photo is not sent to SEACOL</div>
+    </section>
+
+    <section class="studio" aria-labelledby="studio-title">
+      <div class="studio-head">
+        <div>
+          <p class="step">01 · CAPTURE</p>
+          <h2 id="studio-title">Start with your room</h2>
+        </div>
+        <button id="new-view" class="text-button" type="button" hidden>New view</button>
+      </div>
+
+      <div class="capture-card" id="capture-card">
+        <div class="capture-icon" aria-hidden="true">◎</div>
+        <h3>Open your camera</h3>
+        <p>Point toward the room you want to explore. You decide when to capture.</p>
+        <button id="open-camera" class="primary" type="button">Open my camera</button>
+        <label class="secondary file-label">Choose a photo instead<input id="photo-input" type="file" accept="image/*" hidden></label>
+        <p id="camera-status" class="microcopy" role="status"></p>
+      </div>
+
+      <div class="camera-shell" id="camera-shell" hidden>
+        <video id="camera" autoplay playsinline muted></video>
+        <div class="camera-frame" aria-hidden="true"></div>
+        <div class="camera-actions">
+          <button id="close-camera" class="ghost" type="button">Close</button>
+          <button id="capture-view" class="shutter" type="button" aria-label="Capture this view"><span></span></button>
+          <button id="flip-camera" class="ghost" type="button">Flip</button>
+        </div>
+      </div>
+
+      <div class="workspace" id="workspace" hidden>
+        <div class="viewer">
+          <canvas id="preview" aria-label="Your room color preview"></canvas>
+          <div id="ai-badge" class="ai-badge" hidden>AI analyzing surfaces…</div>
+        </div>
+        <div class="viewer-actions">
+          <button id="find-walls" class="primary" type="button">Find my walls with AI</button>
+          <button id="show-original" class="secondary" type="button">Hold to see original</button>
+        </div>
+        <p id="ai-status" class="microcopy" role="status">Capture or choose a photo, then let Color Chart identify paintable surfaces.</p>
+      </div>
+    </section>
+
+    <section class="controls" id="controls" hidden>
+      <div class="panel">
+        <p class="step">02 · SURFACES</p>
+        <h2>Choose what to recolor</h2>
+        <div id="surface-list" class="surface-list"></div>
+        <details>
+          <summary>AI missed an edge?</summary>
+          <p>Automatic segmentation is a starting point. Use “Add to surface” or “Erase from surface” for a quick correction.</p>
+          <div class="correction-tools">
+            <button id="brush-add" type="button">+ Add to surface</button>
+            <button id="brush-erase" type="button">− Erase from surface</button>
+            <label>Brush <input id="brush-size" type="range" min="8" max="70" value="28"></label>
+          </div>
+        </details>
+      </div>
+
+      <div class="panel color-panel">
+        <p class="step">03 · COLOR</p>
+        <div class="color-title-row">
+          <h2>Explore color</h2>
+          <span id="color-count"></span>
+        </div>
+        <div class="catalog-tabs" role="tablist">
+          <button class="catalog-tab active" data-catalog="seacol" type="button">SEACOL Spectrum</button>
+          <button class="catalog-tab" data-catalog="ppg" type="button">PPG verified</button>
+          <button class="catalog-tab" data-catalog="brands" type="button">Other brands</button>
+        </div>
+        <div class="search-row">
+          <input id="color-search" type="search" placeholder="Search color, family, code or HEX" aria-label="Search colors">
+          <input id="custom-color" type="color" value="#9b91a1" aria-label="Choose any custom color">
+        </div>
+        <div id="brand-notice" class="brand-notice" hidden></div>
+        <div id="color-grid" class="color-grid"></div>
+        <p class="color-disclaimer">On-screen color is a visualization. Always confirm the final selection with a physical paint sample before purchase or application.</p>
+      </div>
+    </section>
+
+    <section class="selection" id="selection" hidden>
+      <div>
+        <p class="step">04 · SAVE</p>
+        <h2>Your color direction</h2>
+        <p id="selection-summary">Choose a surface and color to begin.</p>
+      </div>
+      <div class="save-actions">
+        <button id="save-project" class="primary" type="button">Save on this device</button>
+        <button id="reset-project" class="secondary" type="button">Reset colors</button>
+      </div>
+      <p id="save-status" class="microcopy" role="status"></p>
+    </section>
+
+    <section class="manufacturer-links">
+      <p class="step">PAINT BRAND REFERENCE</p>
+      <h2>Match the digital idea to a real product.</h2>
+      <p>SEACOL Color Chart keeps digital visualization separate from manufacturer specifications. When you choose a brand code, confirm it with that manufacturer's physical sample.</p>
+      <div class="brand-links">
+        <a href="https://www.sherwin-williams.com/en-us/color" target="_blank" rel="noopener noreferrer">Sherwin-Williams colors ↗</a>
+        <a href="https://www.benjaminmoore.com/en-us/paint-colors" target="_blank" rel="noopener noreferrer">Benjamin Moore colors ↗</a>
+        <a href="https://www.ppgpaints.com/browse-all-colors" target="_blank" rel="noopener noreferrer">PPG colors ↗</a>
+      </div>
+    </section>
+  </main>
+
+  <footer><a href="/">Back to SEACOL Painting</a><span>Color visualization is for inspiration and project planning.</span></footer>
+  <script src="color-chart.js?v=1" defer></script>
+</body>
+</html>
