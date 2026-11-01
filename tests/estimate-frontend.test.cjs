@@ -25,8 +25,12 @@ function fixture({ valid = true, present = true } = {}) {
 
   function element(id) {
     const listeners = new Map();
+    let text = '';
     const node = {
-      id, hidden: false, disabled: false, textContent: '', value: '', href: '',
+      id, hidden: false, disabled: false, value: '', href: '', childNodes: [],
+      get textContent() { return node.childNodes.length ? node.childNodes.map(child => child.textContent).join('') : text; },
+      set textContent(value) { text = String(value); node.childNodes = []; },
+      replaceChildren(...children) { text = ''; node.childNodes = children; },
       attrs: {}, dataset: {},
       classList: { contains: () => false, toggle() {} },
       addEventListener(type, fn) {
@@ -40,6 +44,7 @@ function fixture({ valid = true, present = true } = {}) {
       },
       setAttribute(name, value) { node.attrs[name] = value; },
       focus() { document.activeElement = node; },
+      scrollIntoView(options) { node.scrollOptions = { ...options }; },
       select() { node.selected = true; },
       closest(selector) { return selector === `#${id}` ? node : null; },
     };
@@ -132,6 +137,7 @@ function fixture({ valid = true, present = true } = {}) {
 
 function assertRecoverable(f) {
   assert.equal(f.status.dataset.state, 'error');
+  assert.equal(f.status.scrollOptions, undefined, 'An error must not scroll away from the retained entries');
   assert.equal(f.colorLab.hidden, true);
   assert.equal(f.fields.hidden, false);
   assert.equal(f.fields.disabled, false);
@@ -224,6 +230,8 @@ test('a durable 201 acknowledgement confirms receipt without exposing its refere
   const f = fixture(); const pending = f.send();
   f.requests[0].respond(201, { ok: true, reference: 'SC-20261031-ACCEPTED' }); await pending;
   assert.equal(f.status.dataset.state, 'success');
+  assert.match(f.status.textContent, /A beautiful space begins with your vision\./);
+  assert.match(f.status.textContent, /received your request.*exploring the possibilities with you/);
   assert.doesNotMatch(f.status.textContent, /SC-[A-Z0-9-]+|Reference:/i);
   assert.equal(f.colorLab.hidden, false);
   assert.equal(f.fields.hidden, true);
@@ -232,6 +240,7 @@ test('a durable 201 acknowledgement confirms receipt without exposing its refere
   assert.equal(f.another.hidden, false);
   assert.equal(f.fallback.hidden, true);
   assert.equal(f.document.activeElement, f.status);
+  assert.deepEqual(f.status.scrollOptions, { block: 'start', behavior: 'instant' });
   assert.equal(f.events.length, 1);
   assert.equal(f.events[0].type, 'seacol:estimate-success');
   assert.deepEqual(JSON.parse(JSON.stringify(f.events[0].detail)), { project: sample.project });
@@ -248,6 +257,7 @@ test('an acknowledged duplicate shows success without counting a second conversi
   f.requests[0].respond(200, { ok: true, reference: 'SC-20261031-EXISTING', duplicate: true }); await pending;
   assert.equal(f.status.dataset.state, 'success');
   assert.doesNotMatch(f.status.textContent, /SC-[A-Z0-9-]+|Reference:/i);
+  assert.deepEqual(f.status.scrollOptions, { block: 'start', behavior: 'instant' });
   assert.equal(f.colorLab.hidden, false);
   assert.equal(f.fields.hidden, true);
   assert.equal(f.events.length, 0);

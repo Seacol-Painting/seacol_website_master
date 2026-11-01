@@ -28,6 +28,8 @@ The form submits JSON to `/api/estimate`. Success means the request was stored p
 
 After confirmed receipt, an optional invitation opens SEACOL Color Lab in a new tab. The link is fixed and sends no form fields, request identifier or referrer. It stays hidden before submission, while sending, after an error and when starting another request. Before releasing this invitation, verify that Color Lab is accessible to the intended customer audience; its access is managed separately in Sites.
 
+The receipt uses a short editorial heading and a responsive invitation photograph, with the Color Lab button overlaid at the bottom. The responsive WebP invitation assets are loaded lazily. Pending and error messages keep their plain, accessible status presentation; the photograph is part of the confirmed-receipt state only.
+
 Requests are stored in the private Vercel Blob store **seacol-website-inbox** (`store_ERBXwMNbaDaLdkNk`). In the Vercel project, open **Storage**, select this store, and inspect the **estimates** folder. Only authorized account members can read these records. There is no public endpoint for listing or downloading requests. Preview verification records are separated under `preview/estimates/`; production records remain under `estimates/`. Preview requests never send owner email notifications.
 
 The inbox is the source of truth. Analytics conversions can be absent when visitors opt out, block analytics or lose a connection. A provider's email acceptance also does not prove delivery to an inbox.
