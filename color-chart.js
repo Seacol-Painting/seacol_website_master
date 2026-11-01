@@ -76,7 +76,28 @@ async function openCamera(){
 function setImageFromCanvas(canvas){const max=1400,scale=Math.min(1,max/canvas.width);const w=Math.max(1,Math.round(canvas.width*scale)),h=Math.max(1,Math.round(canvas.height*scale));els.preview.width=w;els.preview.height=h;els.ctx.drawImage(canvas,0,0,w,h);state.original=els.ctx.getImageData(0,0,w,h);state.image=state.original;state.surfaces=[];state.activeSurface=null;els.cameraShell.hidden=true;els.captureCard.hidden=true;els.workspace.hidden=false;els.controls.hidden=true;$('#selection').hidden=true;$('#new-view').hidden=false;stopCamera();render();}
 function capture(){if(!els.camera.videoWidth)return;const c=document.createElement('canvas');c.width=els.camera.videoWidth;c.height=els.camera.videoHeight;c.getContext('2d').drawImage(els.camera,0,0);setImageFromCanvas(c);}
 function loadFile(file){if(!file||!file.type.startsWith('image/'))return;const img=new Image();img.onload=()=>{const c=document.createElement('canvas');c.width=img.naturalWidth;c.height=img.naturalHeight;c.getContext('2d').drawImage(img,0,0);setImageFromCanvas(c);URL.revokeObjectURL(img.src)};img.src=URL.createObjectURL(file);}
-async function getSegmenter(){if(state.segmenter)return state.segmenter;els.aiBadge.hidden=false;els.aiStatus.textContent='Loading the on-device scene model for the first time…';const {pipeline,env}=await import('https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.8.1');env.allowLocalModels=false;env.useBrowserCache=true;state.segmenter=await pipeline('image-segmentation','Xenova/segformer-b0-finetuned-ade-512-512',{dtype:'q8',progress_callback:p=>{if(p?.status==='progress'&&p.total){const pct=Math.round(100*p.loaded/p.total);els.aiStatus.textContent=`Preparing AI model… ${pct}%`;}}});return state.segmenter;}
+async function loadTransformers(){
+  const sources=[
+    'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.8.1/dist/transformers.web.min.js',
+    'https://unpkg.com/@huggingface/transformers@3.8.1/dist/transformers.web.min.js'
+  ];
+  let lastError=null;
+  for(const url of sources){
+    try{return await import(url)}catch(err){lastError=err;console.warn('Transformers.js source failed',url,err)}
+  }
+  throw new Error('The AI engine could not be loaded on this network. Reload the page or try Wi-Fi, then press “Find my walls with AI” again.');
+}
+async function getSegmenter(){
+  if(state.segmenter)return state.segmenter;
+  els.aiBadge.hidden=false;
+  els.aiStatus.textContent='Loading the on-device scene model for the first time…';
+  const {pipeline,env}=await loadTransformers();
+  env.allowLocalModels=false;
+  env.useBrowserCache=true;
+  if(env.backends?.onnx?.wasm) env.backends.onnx.wasm.wasmPaths='https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.8.1/dist/';
+  state.segmenter=await pipeline('image-segmentation','Xenova/segformer-b0-finetuned-ade-512-512',{dtype:'q8',progress_callback:p=>{if(p?.status==='progress'&&p.total){const pct=Math.round(100*p.loaded/p.total);els.aiStatus.textContent=`Preparing AI model… ${pct}%`;}}});
+  return state.segmenter;
+}
 function maskBytes(mask){const n=mask.width*mask.height,d=mask.data;if(d.length===n)return d;const out=new Uint8Array(n);for(let i=0;i<n;i++)out[i]=d[i*4+3]||d[i*4]||0;return out;}
 function components(bytes,w,h,minArea){const seen=new Uint8Array(bytes.length),out=[];for(let seed=0;seed<bytes.length;seed++){if(seen[seed]||bytes[seed]<100)continue;const stack=[seed],idx=[];seen[seed]=1;while(stack.length){const p=stack.pop();idx.push(p);const x=p%w,y=(p/w)|0;const ns=[p-1,p+1,p-w,p+w];for(const q of ns){if(q<0||q>=bytes.length||seen[q]||bytes[q]<100)continue;const qx=q%w,qy=(q/w)|0;if(Math.abs(qx-x)+Math.abs(qy-y)!==1)continue;seen[q]=1;stack.push(q);}}if(idx.length>=minArea){const b=new Uint8Array(bytes.length);idx.forEach(i=>b[i]=255);out.push(b);}}return out.sort((a,b)=>b.reduce((s,v)=>s+(v>0),0)-a.reduce((s,v)=>s+(v>0),0));}
 async function findWalls(){if(!state.original)return;try{els.aiBadge.hidden=false;$('#find-walls').disabled=true;const seg=await getSegmenter();els.aiStatus.textContent='Understanding walls, openings, ceiling and furniture…';const dataUrl=els.preview.toDataURL('image/jpeg',.9);const result=await seg(dataUrl);const surfaces=[];let wallN=0;for(const item of result){const label=String(item.label).toLowerCase();const bytes=maskBytes(item.mask);if(label==='wall'){const parts=components(bytes,item.mask.width,item.mask.height,Math.max(40,Math.round(bytes.length*.012)));for(const part of parts.slice(0,8)){wallN++;surfaces.push({id:`wall-${wallN}`,name:`Wall ${wallN}`,label:'wall',mask:part,mw:item.mask.width,mh:item.mask.height,color:null});}}else if(['ceiling','cabinet'].includes(label)){surfaces.push({id:label,name:label[0].toUpperCase()+label.slice(1),label,mask:bytes,mw:item.mask.width,mh:item.mask.height,color:null});}}state.surfaces=surfaces;if(!surfaces.length)throw new Error('No paintable wall was detected clearly enough. Try a wider, brighter view.');state.activeSurface=surfaces[0].id;els.controls.hidden=false;$('#selection').hidden=false;renderSurfaceList();renderColors();render();els.aiStatus.textContent=`AI found ${wallN} wall region${wallN===1?'':'s'}${surfaces.some(s=>s.label==='ceiling')?' and the ceiling':''}. Tap a surface, then choose a color.`;els.controls.scrollIntoView({behavior:'smooth',block:'start'});}catch(e){console.error(e);els.aiStatus.textContent=e.message||'AI segmentation could not finish on this device. You can retry or choose another photo.';}finally{els.aiBadge.hidden=true;$('#find-walls').disabled=false;}}
