@@ -12,7 +12,42 @@ const ppg=[
 ].map(([name,code,rgb])=>({name,code,family:'PPG SIDINGSAFE',hex:rgbToHex(rgb),brand:'PPG'}));
 function rgbToHex(rgb){const m=rgb.match(/\d+/g).map(Number);return '#'+m.map(v=>v.toString(16).padStart(2,'0')).join('');}
 function stopCamera(){if(state.stream){state.stream.getTracks().forEach(t=>t.stop());state.stream=null;}els.camera.srcObject=null;}
-async function openCamera(){try{stopCamera();state.stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:state.facing},width:{ideal:1920},height:{ideal:1080}},audio:false});els.camera.srcObject=state.stream;els.captureCard.hidden=true;els.cameraShell.hidden=false;$('#camera-status').textContent='';}catch(err){$('#camera-status').textContent=err?.name==='NotAllowedError'?'Camera permission was not granted. You can still choose a photo.':'Camera could not be opened. Try choosing a photo instead.';}}
+async function openCamera(){
+  const status=$('#camera-status');
+  if(!navigator.mediaDevices?.getUserMedia){
+    status.textContent='This browser does not expose camera access here. Try opening Color Chart in Chrome or Safari, or choose a photo instead.';
+    return;
+  }
+  stopCamera();
+  status.textContent='Requesting camera access…';
+  let firstError=null;
+  try{
+    try{
+      state.stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:state.facing},width:{ideal:1920},height:{ideal:1080}},audio:false});
+    }catch(err){
+      firstError=err;
+      if(['OverconstrainedError','NotFoundError','NotReadableError','TypeError'].includes(err?.name)){
+        state.stream=await navigator.mediaDevices.getUserMedia({video:true,audio:false});
+      }else throw err;
+    }
+    els.camera.srcObject=state.stream;
+    await els.camera.play().catch(()=>{});
+    els.captureCard.hidden=true;
+    els.cameraShell.hidden=false;
+    status.textContent='';
+  }catch(err){
+    console.error('Camera access failed',firstError||err,err);
+    if(err?.name==='NotAllowedError'||err?.name==='SecurityError'){
+      status.textContent='Camera access is blocked. Allow camera permission for seacolpaintingllc.com in your browser, then try again. You can also choose a photo.';
+    }else if(err?.name==='NotFoundError'){
+      status.textContent='No usable camera was found on this device. You can choose a photo instead.';
+    }else if(err?.name==='NotReadableError'){
+      status.textContent='The camera is being used by another app or could not start. Close other camera apps and try again.';
+    }else{
+      status.textContent='Camera could not be opened on this device. Try again or choose a photo instead.';
+    }
+  }
+}
 function setImageFromCanvas(canvas){const max=1400,scale=Math.min(1,max/canvas.width);const w=Math.max(1,Math.round(canvas.width*scale)),h=Math.max(1,Math.round(canvas.height*scale));els.preview.width=w;els.preview.height=h;els.ctx.drawImage(canvas,0,0,w,h);state.original=els.ctx.getImageData(0,0,w,h);state.image=state.original;state.surfaces=[];state.activeSurface=null;els.cameraShell.hidden=true;els.captureCard.hidden=true;els.workspace.hidden=false;els.controls.hidden=true;$('#selection').hidden=true;$('#new-view').hidden=false;stopCamera();render();}
 function capture(){if(!els.camera.videoWidth)return;const c=document.createElement('canvas');c.width=els.camera.videoWidth;c.height=els.camera.videoHeight;c.getContext('2d').drawImage(els.camera,0,0);setImageFromCanvas(c);}
 function loadFile(file){if(!file||!file.type.startsWith('image/'))return;const img=new Image();img.onload=()=>{const c=document.createElement('canvas');c.width=img.naturalWidth;c.height=img.naturalHeight;c.getContext('2d').drawImage(img,0,0);setImageFromCanvas(c);URL.revokeObjectURL(img.src)};img.src=URL.createObjectURL(file);}
