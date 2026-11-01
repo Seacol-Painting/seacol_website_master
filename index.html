@@ -8,7 +8,7 @@
   <meta name="description" content="Premium residential and commercial painting, cabinet refinishing, built-ins, surface preparation and detailed finishes throughout Seattle and King County." />
   <meta name="theme-color" content="#081a2b" />
   <link rel="icon" type="image/png" sizes="64x64" href="assets/seacol-favicon.png" />
-  <link rel="stylesheet" href="styles.css?v=estimate-vision-1" />
+  <link rel="stylesheet" href="styles.css?v=estimate-camera-1" />
   <link rel="stylesheet" href="portfolio-showcase.css" />
   <meta property="og:title" content="SEACOL PAINTING LLC" />
   <meta property="og:description" content="Art in the finish. Excellence in the experience. Premium painting in Seattle and King County." />
@@ -222,15 +222,17 @@
           <label><span>Property</span><select name="property"><option>Residential</option><option>Commercial</option></select></label>
           <label class="full"><span>Project details</span><textarea name="details" rows="5" minlength="10" maxlength="4000" required placeholder="What would you like to paint or refinish?"></textarea></label>
           <label class="estimate-honeypot" aria-hidden="true"><span>Leave this field empty</span><input name="website" tabindex="-1" autocomplete="off" maxlength="200" /></label>
-          <label class="estimate-consent full"><input name="consent" type="checkbox" required /><span>I agree that SEACOL may use these details to respond to my estimate request. <a href="/privacy">Privacy Policy</a></span></label>
+          <label class="estimate-consent full"><input name="consent" type="checkbox" required /><span>I agree that SEACOL may use these details to respond to my estimate request. <a href="/privacy">Privacy Policy</a><span class="estimate-camera-disclosure">Color Chart is optional. If I choose to use my camera, I’ll be asked for permission in my browser. My photos stay on my device.</span></span></label>
           </fieldset>
           <button class="button button-navy full" id="estimate-submit" type="submit" disabled>Send My Estimate Request</button>
           <div class="full estimate-status" id="estimate-status" role="status" aria-live="polite" aria-atomic="true" tabindex="-1" hidden></div>
           <section class="full estimate-color-lab" id="estimate-color-lab" aria-labelledby="estimate-color-lab-title" hidden>
-            <img class="estimate-color-lab-image" src="assets/projects/responsive/color-lab-invitation-1280-b37847210e-960.webp" srcset="assets/projects/responsive/color-lab-invitation-1280-b37847210e-480.webp 480w, assets/projects/responsive/color-lab-invitation-1280-b37847210e-960.webp 960w, assets/projects/responsive/color-lab-invitation-1280-b37847210e-1280.webp 1280w" sizes="(max-width: 560px) calc(100vw - 76px), (max-width: 850px) calc(100vw - 108px), (max-width: 1220px) calc(60vw - 140px), 592px" width="1280" height="853" alt="A hand holding a phone to photograph a warmly lit interior" loading="lazy" decoding="async" />
             <div class="estimate-color-lab-content">
-              <h3 id="estimate-color-lab-title">Discover what feels like home.</h3>
-              <a class="button button-gold" href="https://seacol-color-lab.camilo-caro.chatgpt.site/" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer">Explore SEACOL Color Lab <span aria-hidden="true">↗</span><span class="visually-hidden"> (opens in a new tab)</span></a>
+              <div class="estimate-camera-heading"><svg class="estimate-camera-icon" viewBox="0 0 48 48" fill="none" aria-hidden="true" focusable="false"><path d="M5 15a4 4 0 0 1 4-4h7l3-5h10l3 5h7a4 4 0 0 1 4 4v23a4 4 0 0 1-4 4H9a4 4 0 0 1-4-4Z"/><circle cx="24" cy="26" r="9"/><path d="M35 17h2"/></svg><span>SEACOL COLOR CHART</span></div>
+              <h3 id="estimate-color-lab-title">See your space in a new light.</h3>
+              <p class="estimate-camera-copy">Open your camera, capture a view, and explore your colors.</p>
+              <a class="button button-gold" href="https://seacol-color-lab.camilo-caro.chatgpt.site/#camera" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer">Open SEACOL Color Chart <span aria-hidden="true">↗</span><span class="visually-hidden"> (opens in a new tab)</span></a>
+              <p class="estimate-camera-note">Camera access is your choice. Your photos stay on your device.</p>
             </div>
           </section>
           <button class="button full" id="estimate-another" type="button" hidden>Send another request</button>

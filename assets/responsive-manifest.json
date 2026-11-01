@@ -139,46 +139,6 @@
       ]
     },
     {
-      "source": "assets/color-lab-invitation-1280.webp",
-      "sourceWidth": 1280,
-      "sourceHeight": 853,
-      "sourceBytes": 89064,
-      "sourceSha256": "c93368dde2b8021022fdeefddab0d8ce4d91b41583c566ad93ca7e545ad00553",
-      "kind": "raster",
-      "pages": [
-        "index.html"
-      ],
-      "variants": [
-        {
-          "src": "assets/projects/responsive/color-lab-invitation-1280-b37847210e-480.webp",
-          "width": 480,
-          "height": 320,
-          "bytes": 18978,
-          "sha256": "237edd7a8a30a5e1c094516915f69927a0139e83284ac0748790e7922a25b490",
-          "encoding": "webp",
-          "quality": 86
-        },
-        {
-          "src": "assets/projects/responsive/color-lab-invitation-1280-b37847210e-960.webp",
-          "width": 960,
-          "height": 640,
-          "bytes": 47312,
-          "sha256": "666f441baa115243cb08936e7918f44498f3461f3cb2bb9e4e573b52e93a3d89",
-          "encoding": "webp",
-          "quality": 86
-        },
-        {
-          "src": "assets/projects/responsive/color-lab-invitation-1280-b37847210e-1280.webp",
-          "width": 1280,
-          "height": 853,
-          "bytes": 89064,
-          "sha256": "c93368dde2b8021022fdeefddab0d8ce4d91b41583c566ad93ca7e545ad00553",
-          "encoding": "original-webp",
-          "quality": null
-        }
-      ]
-    },
-    {
       "source": "assets/commercial-studio.webp",
       "sourceWidth": 1600,
       "sourceHeight": 747,
