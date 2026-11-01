@@ -1,7 +1,7 @@
 (() => {
 'use strict';
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
-const state={stream:null,facing:'environment',image:null,original:null,segmenter:null,surfaces:[],activeSurface:null,color:'#9b91a1',mode:null,originalHeld:false,catalog:'seacol'};
+const state={stream:null,facing:'environment',image:null,original:null,segmenter:null,surfaces:[],activeSurface:null,color:'#9b91a1',mode:null,originalHeld:false,catalog:'sherwin'};
 const els={captureCard:$('#capture-card'),cameraShell:$('#camera-shell'),camera:$('#camera'),workspace:$('#workspace'),preview:$('#preview'),ctx:$('#preview').getContext('2d',{willReadFrequently:true}),controls:$('#controls'),surfaceList:$('#surface-list'),colorGrid:$('#color-grid'),aiStatus:$('#ai-status'),aiBadge:$('#ai-badge'),colorCount:$('#color-count'),brandNotice:$('#brand-notice')};
 
 function hslToHex(h,s,l){s/=100;l/=100;const k=n=>(n+h/30)%12,a=s*Math.min(l,1-l),f=n=>l-a*Math.max(-1,Math.min(k(n)-3,Math.min(9-k(n),1)));return '#'+[f(0),f(8),f(4)].map(x=>Math.round(255*x).toString(16).padStart(2,'0')).join('');}
@@ -138,15 +138,49 @@ function render(){if(!state.original)return;const src=state.original,d=new Uint8
 function hexRgb(hex){const n=parseInt(hex.slice(1),16);return[(n>>16)&255,(n>>8)&255,n&255];}
 function renderSurfaceList(){els.surfaceList.innerHTML='';state.surfaces.forEach(s=>{const b=document.createElement('button');b.type='button';b.className='surface-button'+(s.id===state.activeSurface?' active':'');b.innerHTML=`<span>${s.name}</span><span>${s.color||'No color yet'}</span>`;b.onclick=()=>{state.activeSurface=s.id;renderSurfaceList();renderColors();};els.surfaceList.appendChild(b);});}
 function activeSurface(){return state.surfaces.find(s=>s.id===state.activeSurface);}
-function renderColors(){const q=$('#color-search').value.trim().toLowerCase();let colors=state.catalog==='ppg'?ppg:state.catalog==='sherwin'?sherwin:state.catalog==='benjamin'?benjamin:seacolColors;els.brandNotice.hidden=true;if(state.catalog==='benjamin'){els.brandNotice.hidden=false;els.brandNotice.textContent='Benjamin Moore names and codes are official. The displayed swatches are SEACOL screen previews for visualization only, not manufacturer-certified HEX values.';}if(q)colors=colors.filter(c=>(c.name+' '+c.code+' '+c.family+' '+c.hex).toLowerCase().includes(q));els.colorCount.textContent=`${colors.length} colors`;els.colorGrid.innerHTML='';colors.forEach(c=>{const b=document.createElement('button');b.className='swatch';b.type='button';b.title=`${c.name} ${c.code}`;b.innerHTML=`<div class="swatch-color" style="background:${c.hex}"></div><strong>${c.name}</strong><small>${c.code}${c.previewOnly?' · screen preview':' · '+c.hex.toUpperCase()}</small>`;b.onclick=()=>applyColor(c.hex,c.name,c.code);els.colorGrid.appendChild(b);});}
+function renderColors(){const q=$('#color-search').value.trim().toLowerCase();let colors=state.catalog==='ppg'?ppg:state.catalog==='benjamin'?benjamin:sherwin;els.brandNotice.hidden=true;if(state.catalog==='benjamin'){els.brandNotice.hidden=false;els.brandNotice.textContent='Benjamin Moore names and codes are official. The displayed swatches are SEACOL screen previews for visualization only, not manufacturer-certified HEX values.';}if(q)colors=colors.filter(c=>(c.name+' '+c.code+' '+c.family+' '+c.hex).toLowerCase().includes(q));els.colorCount.textContent=`${colors.length} colors`;els.colorGrid.innerHTML='';colors.forEach(c=>{const b=document.createElement('button');b.className='swatch';b.type='button';b.title=`${c.name} ${c.code}`;b.innerHTML=`<div class="swatch-color" style="background:${c.hex}"></div><strong>${c.name}</strong><small>${c.code}${c.previewOnly?' · screen preview':' · '+c.hex.toUpperCase()}</small>`;b.onclick=()=>applyColor(c.hex,c.name,c.code);els.colorGrid.appendChild(b);});}
 function applyColor(hex,name='Custom color',code=hex.toUpperCase()){const s=activeSurface();if(!s){els.aiStatus.textContent='Choose a detected surface first.';return;}s.color=hex;s.colorName=name;s.colorCode=code;state.color=hex;renderSurfaceList();render();updateSummary();}
 function updateSummary(){const chosen=state.surfaces.filter(s=>s.color);$('#selection-summary').textContent=chosen.length?chosen.map(s=>`${s.name}: ${s.colorName||s.color} (${s.colorCode||s.color})`).join(' · '):'Choose a surface and color to begin.';}
 function resetProject(){state.surfaces.forEach(s=>{s.color=null;delete s.colorName;delete s.colorCode});renderSurfaceList();render();updateSummary();}
 function saveProject(){if(!state.original)return;const data={savedAt:new Date().toISOString(),surfaces:state.surfaces.map(({id,name,label,color,colorName,colorCode})=>({id,name,label,color,colorName,colorCode}))};localStorage.setItem('seacol-color-chart-selection',JSON.stringify(data));$('#save-status').textContent='Saved on this device. Your room image itself is not saved by SEACOL Color Chart.';}
 function pointerBrush(ev){if(!state.mode||!state.activeSurface)return;const s=activeSurface();if(!s)return;const r=els.preview.getBoundingClientRect(),x=(ev.clientX-r.left)/r.width*s.mw,y=(ev.clientY-r.top)/r.height*s.mh,rad=Number($('#brush-size').value)*s.mw/r.width;for(let yy=Math.max(0,Math.floor(y-rad));yy<Math.min(s.mh,Math.ceil(y+rad));yy++)for(let xx=Math.max(0,Math.floor(x-rad));xx<Math.min(s.mw,Math.ceil(x+rad));xx++)if((xx-x)**2+(yy-y)**2<=rad**2)s.mask[yy*s.mw+xx]=state.mode==='add'?255:0;render();}
-$('#open-camera').onclick=openCamera;$('#close-camera').onclick=()=>{stopCamera();els.cameraShell.hidden=true;els.captureCard.hidden=false};$('#flip-camera').onclick=async()=>{state.facing=state.facing==='environment'?'user':'environment';await openCamera()};$('#capture-view').onclick=capture;$('#photo-input').onchange=e=>loadFile(e.target.files[0]);$('#find-walls').onclick=findWalls;$('#new-view').onclick=()=>{stopCamera();state.image=state.original=null;state.surfaces=[];els.captureCard.hidden=false;els.cameraShell.hidden=true;els.workspace.hidden=true;els.controls.hidden=true;$('#selection').hidden=true;$('#new-view').hidden=true;$('#photo-input').value='';};
+function rotateCurrentPhoto(){
+  if(!state.original)return;
+  const src=state.original,w=src.width,h=src.height;
+  const temp=document.createElement('canvas');
+  temp.width=h; temp.height=w;
+  const t=temp.getContext('2d');
+  const imgCanvas=document.createElement('canvas');
+  imgCanvas.width=w; imgCanvas.height=h;
+  imgCanvas.getContext('2d').putImageData(src,0,0);
+  t.translate(h/2,w/2); t.rotate(Math.PI/2); t.drawImage(imgCanvas,-w/2,-h/2);
+  els.preview.width=h; els.preview.height=w;
+  els.ctx.drawImage(temp,0,0);
+  state.original=els.ctx.getImageData(0,0,h,w);
+  state.image=state.original;
+  state.surfaces=[];
+  state.activeSurface=null;
+  els.controls.hidden=true;
+  $('#selection').hidden=true;
+  els.aiStatus.textContent='Photo rotated. Run AI wall detection again.';
+  render();
+}
+function retakePhoto(){
+  state.image=state.original=null;
+  state.surfaces=[];
+  state.activeSurface=null;
+  els.workspace.hidden=true;
+  els.controls.hidden=true;
+  $('#selection').hidden=true;
+  els.captureCard.hidden=false;
+  $('#new-view').hidden=true;
+  $('#photo-input').value='';
+  $('#camera-status').textContent='';
+  window.scrollTo({top:document.querySelector('.studio').offsetTop-12,behavior:'smooth'});
+}
+$('#open-camera').onclick=openCamera;$('#rotate-photo').onclick=rotateCurrentPhoto;$('#retake-photo').onclick=retakePhoto;$('#close-camera').onclick=()=>{stopCamera();els.cameraShell.hidden=true;els.captureCard.hidden=false};$('#flip-camera').onclick=async()=>{state.facing=state.facing==='environment'?'user':'environment';await openCamera()};$('#capture-view').onclick=capture;$('#photo-input').onchange=e=>loadFile(e.target.files[0]);$('#find-walls').onclick=findWalls;$('#new-view').onclick=()=>{stopCamera();state.image=state.original=null;state.surfaces=[];els.captureCard.hidden=false;els.cameraShell.hidden=true;els.workspace.hidden=true;els.controls.hidden=true;$('#selection').hidden=true;$('#new-view').hidden=true;$('#photo-input').value='';};
 $('#show-original').onpointerdown=()=>{state.originalHeld=true;render()};['pointerup','pointercancel','pointerleave'].forEach(t=>$('#show-original').addEventListener(t,()=>{state.originalHeld=false;render()}));
-$$('.catalog-tab').forEach(b=>b.onclick=()=>{$$('.catalog-tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');state.catalog=b.dataset.catalog;renderColors()});$('#color-search').oninput=renderColors;$('#custom-color').oninput=e=>applyColor(e.target.value,'Custom color',e.target.value.toUpperCase());$('#save-project').onclick=saveProject;$('#reset-project').onclick=resetProject;
+$('.brand-card').forEach(b=>b.onclick=()=>{$('.brand-card').forEach(x=>x.classList.remove('active'));b.classList.add('active');state.catalog=b.dataset.catalog;$('#color-search').value='';renderColors()});$('#color-search').oninput=renderColors;$('#custom-color').oninput=e=>applyColor(e.target.value,'Custom color',e.target.value.toUpperCase());$('#save-project').onclick=saveProject;$('#reset-project').onclick=resetProject;
 $('#brush-add').onclick=()=>{state.mode=state.mode==='add'?null:'add';$('#brush-add').classList.toggle('active',state.mode==='add');$('#brush-erase').classList.remove('active')};$('#brush-erase').onclick=()=>{state.mode=state.mode==='erase'?null:'erase';$('#brush-erase').classList.toggle('active',state.mode==='erase');$('#brush-add').classList.remove('active')};els.preview.addEventListener('pointerdown',e=>{if(state.mode){els.preview.setPointerCapture(e.pointerId);pointerBrush(e)}});els.preview.addEventListener('pointermove',e=>{if(state.mode&&e.buttons)pointerBrush(e)});
 window.addEventListener('pagehide',stopCamera);window.addEventListener('beforeunload',stopCamera);
 renderColors();
