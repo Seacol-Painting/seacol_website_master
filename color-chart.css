@@ -227,3 +227,5 @@
   }
   .camera-zoom input{width:32vw}
 }
+
+.project-next a{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;padding:14px 22px;border-radius:12px}.project-next p{max-width:65ch}.project-next{margin-top:24px}

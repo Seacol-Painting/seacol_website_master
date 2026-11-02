@@ -6,9 +6,19 @@
   <title>SEACOL Color Chart | Visualize Paint Colors in Your Space</title>
   <link rel="canonical" href="https://seacolpaintingllc.com/color-chart">
   <meta name="description" content="Use your camera or a photo to let SEACOL Color Chart identify paintable surfaces and preview hundreds of colors in your own space.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="SEACOL Color Chart | Your space, your color">
+  <meta property="og:description" content="Preview paint colors in your own room, download your ideas, and plan your next project with SEACOL.">
+  <meta property="og:url" content="https://seacolpaintingllc.com/color-chart">
+  <meta property="og:image" content="https://seacolpaintingllc.com/assets/color-lab-invitation-1280.webp">
+  <meta property="og:image:alt" content="Explore a new look for your home with SEACOL Color Chart">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="SEACOL Color Chart | Your space, your color">
+  <meta name="twitter:description" content="Try paint colors in your room and download your inspiration.">
+  <meta name="twitter:image" content="https://seacolpaintingllc.com/assets/color-lab-invitation-1280.webp">
   <meta name="theme-color" content="#0d151c">
   <link rel="icon" type="image/png" sizes="64x64" href="assets/seacol-favicon.png">
-  <link rel="stylesheet" href="color-chart.css?v=1">
+  <link rel="stylesheet" href="color-chart.css?v=2">
 </head>
 <body>
   <header class="cc-header">
@@ -26,7 +36,7 @@
       <div class="privacy-chip">AI runs in your browser · Your room photo is not sent to SEACOL</div>
     </section>
 
-    <section class="studio" aria-labelledby="studio-title">
+    <section id="color-studio" class="studio" aria-labelledby="studio-title">
       <div class="studio-head">
         <div>
           <p class="step">01 · CAPTURE</p>
@@ -118,11 +128,19 @@
       </div>
       <div class="save-actions">
         <button id="save-project" class="primary" type="button">Save on this device</button>
+        <button id="download-preview" class="secondary" type="button">Download room preview</button>
+        <button id="download-notes" class="secondary" type="button">Download color notes</button>
         <button id="reset-project" class="secondary" type="button">Reset colors</button>
       </div>
       <p id="save-status" class="microcopy" role="status"></p>
     </section>
 
+    <section class="selection project-next" aria-labelledby="next-title">
+      <div><p class="step">MAKE IT YOURS</p><h2 id="next-title">Love the direction? Let’s bring it home.</h2>
+      <p>Keep your preview and color notes, then tell us about your project. We’ll help you confirm the colors, preparation and finish.</p></div>
+      <div class="save-actions"><a class="primary" href="/#estimate">Request my estimate</a><a class="secondary" href="tel:+12065732474">Call SEACOL</a></div>
+      <p class="microcopy">Your photo and selections stay on your device. Nothing is sent automatically. Confirm colors with physical samples.</p>
+    </section>
     <section class="manufacturer-links">
       <p class="step">PAINT BRAND REFERENCE</p>
       <h2>Match the digital idea to a real product.</h2>
@@ -136,6 +154,6 @@
   </main>
 
   <footer><a href="/">Back to SEACOL Painting</a><span>Color visualization is for inspiration and project planning.</span></footer>
-  <script src="color-chart.js?v=1" defer></script>
+  <script src="color-chart.js?v=2" defer></script>
 </body>
 </html>

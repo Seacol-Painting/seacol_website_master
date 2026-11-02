@@ -4,7 +4,7 @@ import { put } from '@vercel/blob';
 
 const OWNER_EMAIL = 'info@seacolpaintingllc.com';
 
-export function createNotifier({ env = process.env, fetcher = fetch, saveStatus = put } = {}) {
+export function createNotifier({ env = process.env, fetcher = fetch, saveStatus = put, wait = ms => new Promise(resolve => setTimeout(resolve, ms)) } = {}) {
   return async function notify(record) {
     // Preview and local verification must never notify the real business inbox.
     if (record.environment !== 'production') return { status: 'not_production' };
@@ -32,6 +32,7 @@ export function createNotifier({ env = process.env, fetcher = fetch, saveStatus 
       'This request is also saved in the private SEACOL website inbox in Vercel Storage.',
     ];
     let state;
+    for (let attempt = 0; attempt < 3; attempt++) {
     try {
       const response = await fetcher('https://api.resend.com/emails', {
         method: 'POST',
@@ -53,8 +54,17 @@ export function createNotifier({ env = process.env, fetcher = fetch, saveStatus 
       state = response.ok && typeof result?.id === 'string' && result.id.length > 0
         ? { status: 'accepted', providerId: result.id }
         : { status: 'failed', httpStatus: response.status };
+      if (state.status === 'accepted' || (response.status !== 429 && response.status < 500)) break;
+      const retryAfter = response.headers.get('retry-after');
+      const seconds = retryAfter == null ? NaN : Number(retryAfter);
+      const requestedDelay = Number.isFinite(seconds) ? seconds * 1000 : Date.parse(retryAfter) - Date.now();
+      // Respect long provider cooldowns without holding the customer's request open.
+      if (Number.isFinite(requestedDelay) && requestedDelay > 2000) break;
+      if (attempt < 2) await wait(Math.max(250 * 2 ** attempt, Number.isFinite(requestedDelay) ? requestedDelay : 0));
     } catch {
       state = { status: 'failed' };
+      if (attempt < 2) await wait(250 * 2 ** attempt);
+    }
     }
     // Store only delivery metadata here. No email body or provider error text in logs.
     try {
