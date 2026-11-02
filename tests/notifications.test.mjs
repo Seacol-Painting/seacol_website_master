@@ -52,3 +52,29 @@ test('provider failure and status storage failure do not reject the durable esti
     assert.equal((await notify(record)).status, 'failed');
   }
 });
+
+test('transient failures retry with the same idempotency key and stop after success', async () => {
+  let calls=0; const keys=[], delays=[];
+  const notify=createNotifier({env,wait:async ms=>delays.push(ms),saveStatus:async()=>{},fetcher:async(url,opts)=>{
+    keys.push(opts.headers['Idempotency-Key']); calls++;
+    if(calls===1)throw new Error('network');
+    if(calls===2)return Response.json({}, {status:503});
+    return Response.json({id:'recovered'});
+  }});
+  assert.equal((await notify(record)).status,'accepted');
+  assert.equal(calls,3); assert.equal(new Set(keys).size,1);assert.deepEqual(delays,[250,500]);
+});
+test('permanent errors and long rate-limit cooldowns do not retry', async()=>{
+  for(const status of [400,401,403,429]){
+    let calls=0;
+    const notify=createNotifier({env,saveStatus:async()=>{},wait:async()=>{throw new Error('No wait expected');},fetcher:async()=>{calls++;return Response.json({}, {status,headers:{'retry-after':'60'}});}});
+    assert.equal((await notify(record)).status,'failed');assert.equal(calls,1);
+  }
+});
+test('temporary rate limit retries and persistent outages stop at three attempts',async()=>{
+  for(const status of [429,503]){
+    let calls=0;
+    const notify=createNotifier({env,saveStatus:async()=>{},wait:async()=>{},fetcher:async()=>{calls++;return Response.json({}, {status,headers:{'retry-after':'0'}});}});
+    assert.equal((await notify(record)).status,'failed');assert.equal(calls,3);
+  }
+});
