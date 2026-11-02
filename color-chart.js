@@ -1,7 +1,7 @@
 (() => {
 'use strict';
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
-const state={stream:null,facing:'environment',image:null,original:null,segmenter:null,surfaces:[],activeSurface:null,color:'#9b91a1',mode:null,originalHeld:false,catalog:'sherwin'};
+const state={stream:null,facing:'environment',image:null,original:null,segmenter:null,surfaces:[],activeSurface:null,color:'#9b91a1',mode:null,originalHeld:false,catalog:'sherwin',cameraFit:false,zoomCap:null};
 const els={captureCard:$('#capture-card'),cameraShell:$('#camera-shell'),camera:$('#camera'),workspace:$('#workspace'),preview:$('#preview'),ctx:$('#preview').getContext('2d',{willReadFrequently:true}),controls:$('#controls'),surfaceList:$('#surface-list'),colorGrid:$('#color-grid'),aiStatus:$('#ai-status'),aiBadge:$('#ai-badge'),colorCount:$('#color-count'),brandNotice:$('#brand-notice')};
 
 function hslToHex(h,s,l){s/=100;l/=100;const k=n=>(n+h/30)%12,a=s*Math.min(l,1-l),f=n=>l-a*Math.max(-1,Math.min(k(n)-3,Math.min(9-k(n),1)));return '#'+[f(0),f(8),f(4)].map(x=>Math.round(255*x).toString(16).padStart(2,'0')).join('');}
@@ -69,7 +69,32 @@ ppg.push(
   {name:'Sonata',code:'PPG1157-3',family:'PPG verified',hex:'#ABC8D8',brand:'PPG'}
 );
 function rgbToHex(rgb){const m=rgb.match(/\d+/g).map(Number);return '#'+m.map(v=>v.toString(16).padStart(2,'0')).join('');}
-function stopCamera(){if(state.stream){state.stream.getTracks().forEach(t=>t.stop());state.stream=null;}els.camera.srcObject=null;}
+function stopCamera(){if(state.stream){state.stream.getTracks().forEach(t=>t.stop());state.stream=null;}els.camera.srcObject=null;state.zoomCap=null;$('#zoom-wrap').hidden=true;}
+function setupCameraCapabilities(){
+  const track=state.stream?.getVideoTracks?.()[0];
+  const caps=track?.getCapabilities?.()||{};
+  const settings=track?.getSettings?.()||{};
+  if(caps.zoom && Number.isFinite(caps.zoom.min) && Number.isFinite(caps.zoom.max) && caps.zoom.max>caps.zoom.min){
+    state.zoomCap={track,min:caps.zoom.min,max:caps.zoom.max,step:caps.zoom.step||0.1};
+    const z=$('#camera-zoom');
+    z.min=String(caps.zoom.min); z.max=String(caps.zoom.max); z.step=String(caps.zoom.step||0.1); z.value=String(settings.zoom||caps.zoom.min);
+    $('#zoom-wrap').hidden=false;
+  }else{
+    $('#zoom-wrap').hidden=true;
+  }
+}
+async function setCameraZoom(value){
+  const z=state.zoomCap;
+  if(!z)return;
+  try{await z.track.applyConstraints({advanced:[{zoom:Number(value)}]})}catch(err){console.warn('Camera zoom not supported',err)}
+}
+function toggleCameraFit(){
+  state.cameraFit=!state.cameraFit;
+  els.camera.classList.toggle('fit',state.cameraFit);
+  const b=$('#camera-fit');
+  b.setAttribute('aria-pressed',String(state.cameraFit));
+  b.textContent=state.cameraFit?'Fill':'Fit';
+}
 async function openCamera(){
   const status=$('#camera-status');
   if(!navigator.mediaDevices?.getUserMedia){
@@ -90,6 +115,7 @@ async function openCamera(){
     }
     els.camera.srcObject=state.stream;
     await els.camera.play().catch(()=>{});
+    setupCameraCapabilities();
     els.captureCard.hidden=true;
     els.cameraShell.hidden=false;
     status.textContent='';
@@ -178,7 +204,7 @@ function retakePhoto(){
   $('#camera-status').textContent='';
   window.scrollTo({top:document.querySelector('.studio').offsetTop-12,behavior:'smooth'});
 }
-$('#open-camera').onclick=openCamera;$('#rotate-photo').onclick=rotateCurrentPhoto;$('#retake-photo').onclick=retakePhoto;$('#close-camera').onclick=()=>{stopCamera();els.cameraShell.hidden=true;els.captureCard.hidden=false};$('#flip-camera').onclick=async()=>{state.facing=state.facing==='environment'?'user':'environment';await openCamera()};$('#capture-view').onclick=capture;$('#photo-input').onchange=e=>loadFile(e.target.files[0]);$('#find-walls').onclick=findWalls;$('#new-view').onclick=()=>{stopCamera();state.image=state.original=null;state.surfaces=[];els.captureCard.hidden=false;els.cameraShell.hidden=true;els.workspace.hidden=true;els.controls.hidden=true;$('#selection').hidden=true;$('#new-view').hidden=true;$('#photo-input').value='';};
+$('#open-camera').onclick=openCamera;$('#rotate-photo').onclick=rotateCurrentPhoto;$('#retake-photo').onclick=retakePhoto;$('#camera-fit').onclick=toggleCameraFit;$('#camera-zoom').oninput=e=>setCameraZoom(e.target.value);$('#close-camera').onclick=()=>{stopCamera();els.cameraShell.hidden=true;els.captureCard.hidden=false};$('#flip-camera').onclick=async()=>{state.facing=state.facing==='environment'?'user':'environment';await openCamera()};$('#capture-view').onclick=capture;$('#photo-input').onchange=e=>loadFile(e.target.files[0]);$('#find-walls').onclick=findWalls;$('#new-view').onclick=()=>{stopCamera();state.image=state.original=null;state.surfaces=[];els.captureCard.hidden=false;els.cameraShell.hidden=true;els.workspace.hidden=true;els.controls.hidden=true;$('#selection').hidden=true;$('#new-view').hidden=true;$('#photo-input').value='';};
 $('#show-original').onpointerdown=()=>{state.originalHeld=true;render()};['pointerup','pointercancel','pointerleave'].forEach(t=>$('#show-original').addEventListener(t,()=>{state.originalHeld=false;render()}));
 $('.brand-card').forEach(b=>b.onclick=()=>{$('.brand-card').forEach(x=>x.classList.remove('active'));b.classList.add('active');state.catalog=b.dataset.catalog;$('#color-search').value='';renderColors()});$('#color-search').oninput=renderColors;$('#custom-color').oninput=e=>applyColor(e.target.value,'Custom color',e.target.value.toUpperCase());$('#save-project').onclick=saveProject;$('#reset-project').onclick=resetProject;
 $('#brush-add').onclick=()=>{state.mode=state.mode==='add'?null:'add';$('#brush-add').classList.toggle('active',state.mode==='add');$('#brush-erase').classList.remove('active')};$('#brush-erase').onclick=()=>{state.mode=state.mode==='erase'?null:'erase';$('#brush-erase').classList.toggle('active',state.mode==='erase');$('#brush-add').classList.remove('active')};els.preview.addEventListener('pointerdown',e=>{if(state.mode){els.preview.setPointerCapture(e.pointerId);pointerBrush(e)}});els.preview.addEventListener('pointermove',e=>{if(state.mode&&e.buttons)pointerBrush(e)});
