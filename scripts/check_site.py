@@ -309,6 +309,13 @@ class SiteChecker:
     def check_sitemap(self):
         try:
             document = ET.parse(self.root / "sitemap.xml")
+            root = document.getroot()
+            sitemap_ns = "{http://www.sitemaps.org/schemas/sitemap/0.9}"
+            self.require(root.tag == sitemap_ns + "urlset", "Sitemap root must be a urlset")
+            self.require(not (root.text or "").strip(), "Sitemap has unexpected text before URLs")
+            for child in root:
+                self.require(child.tag == sitemap_ns + "url", "Sitemap contains an unsupported element")
+                self.require(not (child.tail or "").strip(), "Sitemap has unexpected text between URLs")
             locations = [node.text for node in document.findall("{http://www.sitemaps.org/schemas/sitemap/0.9}url/{http://www.sitemaps.org/schemas/sitemap/0.9}loc")]
             expected = {canonical_for(name) for name, page in self.pages.items() if "noindex" not in page.metadata.get("robots", "").lower()}
             self.require(len(locations) == len(set(locations)), "Sitemap contains duplicate URLs")
