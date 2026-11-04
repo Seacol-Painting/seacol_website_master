@@ -107,6 +107,7 @@ class Page(HTMLParser):
         self.path = path
         self.ids = set()
         self.duplicate_ids = set()
+        self.duplicate_social_fields = set()
         self.references = []
         self.images = []
         self.sources = []
@@ -131,7 +132,10 @@ class Page(HTMLParser):
         if tag == "h1":
             self.h1_count += 1
         if tag == "meta":
-            self.metadata[attrs.get("name", attrs.get("property", ""))] = attrs.get("content", "")
+            field = attrs.get("name", attrs.get("property", ""))
+            if field.startswith(("og:", "twitter:")) and field in self.metadata:
+                self.duplicate_social_fields.add(field)
+            self.metadata[field] = attrs.get("content", "")
         if tag == "link" and attrs.get("rel") == "canonical":
             self.canonicals.append(attrs.get("href", ""))
         for attribute in ("href", "src", "poster"):
@@ -271,6 +275,7 @@ class SiteChecker:
         self.require("width=device-width" in page.metadata.get("viewport", ""), f"{filename}: missing responsive viewport")
         self.require(page.h1_count == 1, f"{filename}: expected one h1, found {page.h1_count}")
         self.require(not page.duplicate_ids, f"{filename}: duplicate ids {sorted(page.duplicate_ids)}")
+        self.require(not page.duplicate_social_fields, f"{filename}: duplicated social metadata {sorted(page.duplicate_social_fields)}")
         for _, _, raw in page.references:
             self.local_target(raw, filename)
         for attrs in page.images:
