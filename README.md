@@ -54,7 +54,7 @@ Required Production server environment variables:
 
 Notifications run only after the request is saved privately. Repeating an identical submission ID and payload returns the existing receipt without sending another notification. The provider idempotency key is `seacol-estimate/<submissionId>`.
 
-An email failure never discards a saved request. Private notification metadata is stored at `notifications/<submissionId>.json`. An `accepted` status confirms provider acceptance. Resend's `delivered` event confirms acceptance by the recipient's mail server, not necessarily placement in the primary inbox; verify actual receipt in the owner's mailbox. Automatic email retries are not enabled. Review failures through Resend and follow up from the private inbox.
+An email failure never discards a saved request. Private notification metadata is stored at `notifications/<submissionId>.json`. An `accepted` status confirms provider acceptance. Resend's `delivered` event confirms acceptance by the recipient's mail server, not necessarily placement in the primary inbox; verify actual receipt in the owner's mailbox. New notifications retry network failures, HTTP 429 and 5xx up to three attempts with the same provider key. For historical failures, compare private inbox records and notification metadata against Resend delivery events before following up.
 
 After changing email configuration, verify one synthetic production submission, its saved notification status, and receipt by the owner. Repeat the same submission ID and payload to confirm no second notification is sent.
 
