@@ -8,6 +8,14 @@ function hslToHex(h,s,l){s/=100;l/=100;const k=n=>(n+h/30)%12,a=s*Math.min(l,1-l
 const families=[['Warm Neutrals',38,18,91],['Ivory & White',45,18,96],['Greige',32,9,73],['Cool Gray',205,8,70],['Charcoal',205,8,27],['Sage',92,18,55],['Forest',126,27,31],['Blue',210,34,49],['Navy',218,40,28],['Aqua',178,28,53],['Terracotta',18,42,54],['Rose',350,29,60],['Wine',347,35,32],['Ochre',41,52,54]];
 const seacolColors=[];families.forEach(([family,h,s,l],fi)=>{for(let i=0;i<28;i++){const dh=((i%7)-3)*3,ds=((Math.floor(i/7)%4)-1.5)*5,dl=(Math.floor(i/4)-3)*3.2;seacolColors.push({name:`${family} ${String(i+1).padStart(2,'0')}`,code:`SC-${String(fi+1).padStart(2,'0')}${String(i+1).padStart(2,'0')}`,family,hex:hslToHex((h+dh+360)%360,Math.max(3,Math.min(75,s+ds)),Math.max(12,Math.min(97,l+dl)))})}});
 const sherwin=[
+["Alabaster", "SW7008", "#EDEAE0"],
+["Iron Ore", "SW7069", "#434341"],
+["Pure White", "SW7005", "#EDECE6"],
+["Extra White", "SW7006", "#EEEFEA"],
+["Agreeable Gray", "SW7029", "#D1CBC1"],
+["Sage", "SW2860", "#B3AE95"],
+["Urbane Bronze", "SW7048", "#54504A"],
+["Light French Gray", "SW0055", "#C2C0BB"],
 ['Mulberry Silk','SW0001','#94766C'],['Chelsea Mauve','SW0002','#BEAC9F'],['Cabbage Rose','SW0003','#C59F91'],['Rose Brocade','SW0004','#996C6E'],['Deepest Mauve','SW0005','#6D595A'],['Toile Red','SW0006','#8B534E'],['Decorous Amber','SW0007','#AC7559'],['Cajun Red','SW0008','#8D422F'],['Eastlake Gold','SW0009','#C28E61'],['Wickerwork','SW0010','#C19E80'],['Crewel Tan','SW0011','#CBB99B'],['Empire Gold','SW0012','#C19F6E'],['Majolica Green','SW0013','#AEB08F'],['Sheraton Sage','SW0014','#8F8666'],['Gallery Green','SW0015','#708672'],['Billiard Green','SW0016','#45584D'],['Calico','SW0017','#8CA49C'],['Teal Stencil','SW0018','#627F7B'],['Festoon Aqua','SW0019','#A0BBB8'],['Peacock Plume','SW0020','#739694'],['Queen Anne Lilac','SW0021','#C0B6B4'],['Patchwork Plum','SW0022','#7E696A'],
 ['Sea Salt','SW6204','#CDD2CA'],['Comfort Gray','SW6205','#BEC3BB'],['Rainwashed','SW6211','#C2CDC5'],['Tradewind','SW6218','#C2CFCF'],['Riverway','SW6222','#5D7274'],['Naval','SW6244','#2F3D4C'],['Ice Cube','SW6252','#E3E4E1'],['Olympus White','SW6253','#D4D8D7'],['Lazy Gray','SW6254','#BEC1C3'],
 ['Enticing Red','SW6600','#B74E4F'],['Youthful Coral','SW6604','#F0AFA8'],['Emberglow','SW6627','#D67C56'],['Copper Harbor','SW6634','#D57E52'],['Tangerine','SW6640','#F2AC78'],
@@ -234,5 +242,11 @@ $('#show-original').onpointerdown=()=>{state.originalHeld=true;render()};['point
 $$('.brand-card').forEach(b=>b.onclick=()=>{$$('.brand-card').forEach(x=>x.classList.remove('active'));b.classList.add('active');state.catalog=b.dataset.catalog;$('#color-search').value='';renderColors()});$('#color-search').oninput=renderColors;$('#custom-color').oninput=e=>applyColor(e.target.value,'Custom color',e.target.value.toUpperCase());$('#save-project').onclick=saveProject;$('#reset-project').onclick=resetProject;
 $('#brush-add').onclick=()=>{state.mode=state.mode==='add'?null:'add';$('#brush-add').classList.toggle('active',state.mode==='add');$('#brush-erase').classList.remove('active')};$('#brush-erase').onclick=()=>{state.mode=state.mode==='erase'?null:'erase';$('#brush-erase').classList.toggle('active',state.mode==='erase');$('#brush-add').classList.remove('active')};els.preview.addEventListener('pointerdown',e=>{if(state.mode){els.preview.setPointerCapture(e.pointerId);pointerBrush(e)}});els.preview.addEventListener('pointermove',e=>{if(state.mode&&e.buttons)pointerBrush(e)});
 window.addEventListener('pagehide',stopCamera);window.addEventListener('beforeunload',stopCamera);
+$('#estimate-link').addEventListener('click', event => {
+  const lines = state.surfaces.filter(surface => surface.color).map(surface =>
+    surface.name + ': ' + surface.brand + ' | ' + surface.colorName + ' | ' + surface.colorCode + ' | ' + surface.color);
+  const link = event.currentTarget;
+  link.href = lines.length ? '/?colors=' + encodeURIComponent(lines.join('\n')) + '#estimate' : '/#estimate';
+});
 renderColors();
 })();
