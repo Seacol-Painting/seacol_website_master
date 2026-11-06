@@ -1,0 +1,107 @@
+/* Review-only proposal: trust, trade partnerships and estimate conversion. */
+.hero-reassurance {
+  margin: 13px 0 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, .83);
+}
+
+.seacol-confidence {
+  background: #0b2235;
+  color: #f6f4ef;
+  border-top: 1px solid rgba(220, 181, 108, .22);
+  border-bottom: 1px solid rgba(220, 181, 108, .22);
+}
+.confidence-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  padding-top: 27px;
+  padding-bottom: 27px;
+}
+.confidence-item {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  gap: 14px;
+  padding: 8px 22px;
+  border-right: 1px solid rgba(255, 255, 255, .15);
+}
+.confidence-item:first-child { padding-left: 0; }
+.confidence-item:last-child { border-right: 0; padding-right: 0; }
+.confidence-number {
+  color: #d9b676;
+  font-weight: 800;
+  font-size: 12px;
+  letter-spacing: .12em;
+  padding-top: 4px;
+}
+.confidence-item strong { display: block; font-size: 14px; letter-spacing: .015em; }
+.confidence-item p { margin: 7px 0 0; color: #c5d0d8; font-size: 13px; line-height: 1.6; }
+.confidence-item a { color: #f2ce8b; text-underline-offset: 3px; }
+.confidence-item a:hover { color: white; }
+
+.partner-invitation { background: #f3f0e8; padding: 56px 0; }
+.partner-invitation-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 48px;
+  align-items: center;
+  background: linear-gradient(113deg, #071927, #17314a);
+  color: #fff;
+  border: 1px solid rgba(219, 181, 109, .45);
+  border-radius: 20px;
+  padding: 50px 56px;
+  box-shadow: 0 15px 45px rgba(9, 24, 38, .13);
+}
+.partner-invitation .eyebrow { color: #d4ae70; margin: 0 0 14px; }
+.partner-invitation h2 { font-family: Georgia, serif; font-size: clamp(30px, 3.3vw, 46px); line-height: 1.13; font-weight: 400; max-width: 670px; margin: 0 0 18px; }
+.partner-invitation p:not(.eyebrow) { max-width: 710px; color: #d0dbe1; font-size: 16px; line-height: 1.7; margin: 0; }
+.partner-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+.partner-tags span { padding: 8px 11px; border: 1px solid rgba(237, 207, 154, .35); border-radius: 99px; color: #f3e2c8; font-size: 12px; }
+.partner-invitation .button { text-align: center; white-space: nowrap; }
+
+.estimate-form-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee9df;
+  margin: 0;
+}
+.estimate-form-intro strong { font-family: Georgia, serif; font-size: 23px; color: #122b3e; font-weight: 500; }
+.estimate-form-intro span { font-size: 13px; line-height: 1.65; color: #5b6670; }
+
+.gallery-estimate-callout {
+  margin-top: 26px;
+  background: #0e273b;
+  color: white;
+  border-left: 3px solid #d5ad6c;
+  border-radius: 12px;
+  padding: 24px 27px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+.gallery-estimate-callout strong { display: block; font-family: Georgia, serif; font-size: 23px; font-weight: 500; line-height: 1.2; }
+.gallery-estimate-callout p { color: #cad6de; margin: 7px 0 0; font-size: 14px; line-height: 1.6; }
+.gallery-estimate-callout .button { flex: 0 0 auto; white-space: nowrap; }
+
+@media (max-width: 850px) {
+  .hero-reassurance { font-size: 12px; margin-top: 12px; }
+  .confidence-grid { grid-template-columns: 1fr; padding-top: 12px; padding-bottom: 12px; }
+  .confidence-item, .confidence-item:first-child, .confidence-item:last-child {
+    padding: 16px 0;
+    border-right: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, .15);
+  }
+  .confidence-item:last-child { border-bottom: 0; }
+  .partner-invitation { padding: 30px 0; }
+  .partner-invitation-inner { grid-template-columns: 1fr; gap: 26px; padding: 32px 24px; border-radius: 16px; }
+  .partner-invitation h2 { font-size: clamp(30px, 8vw, 42px); }
+  .partner-invitation .button { width: 100%; white-space: normal; }
+  .partner-tags { gap: 7px; }
+  .gallery-estimate-callout { flex-direction: column; align-items: stretch; padding: 25px 21px; }
+  .gallery-estimate-callout .button { width: 100%; text-align: center; white-space: normal; }
+  .estimate-form-intro strong { font-size: 21px; }
+}
