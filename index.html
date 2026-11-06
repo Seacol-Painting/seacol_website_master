@@ -10,6 +10,7 @@
   <link rel="icon" type="image/png" sizes="64x64" href="assets/seacol-favicon.png" />
   <link rel="stylesheet" href="styles.css?v=estimate-camera-1" />
   <link rel="stylesheet" href="portfolio-showcase.css" />
+  <link rel="stylesheet" href="marketing-conversion.css" />
   <meta property="og:title" content="SEACOL PAINTING LLC" />
   <meta property="og:description" content="Art in the finish. Excellence in the experience. Premium painting in Seattle and King County." />
   <meta property="og:url" content="https://seacolpaintingllc.com/" />
@@ -62,11 +63,20 @@
         <div class="hero-actions">
           <a class="button button-gold" href="#estimate">Request a Free Estimate</a>
         </div>
+        <p class="hero-reassurance">A clear scope. Thoughtful preparation. No-pressure consultation.</p>
         <div class="trust-row" aria-label="Service highlights">
           <span>Free estimates</span>
           <span>Residential & commercial</span>
           <span>Detailed preparation</span>
         </div>
+      </div>
+    </section>
+
+    <section class="seacol-confidence" aria-label="The SEACOL experience">
+      <div class="container confidence-grid">
+        <div class="confidence-item"><span class="confidence-number" aria-hidden="true">01</span><div><strong>Clarity before work begins</strong><p>We discuss scope, preparation and finish expectations before recommending an approach.</p></div></div>
+        <div class="confidence-item"><span class="confidence-number" aria-hidden="true">02</span><div><strong>Respect for your property</strong><p>Protection, clear communication and an orderly final walkthrough are part of our process.</p></div></div>
+        <div class="confidence-item"><span class="confidence-number" aria-hidden="true">03</span><div><strong>Check contractor credentials</strong><p>Review Washington contractor records through <a href="https://www.lni.wa.gov/licensing-permits/contractors/hiring-a-contractor/verify-contractor-tradesperson-business" target="_blank" rel="noopener noreferrer">WA Labor &amp; Industries<span class="visually-hidden"> (opens in a new tab)</span></a>.</p></div></div>
       </div>
     </section>
 
@@ -203,6 +213,18 @@
       </div>
     </section>
 
+    <section class="partner-invitation" id="trade-partners" aria-labelledby="partner-invitation-title">
+      <div class="container partner-invitation-inner">
+        <div>
+          <p class="eyebrow">For real estate &amp; trade partners</p>
+          <h2 id="partner-invitation-title">Make the next handoff look effortless.</h2>
+          <p>Preparing a listing, refreshing a rental or completing a remodel? SEACOL can help your team plan careful painting, repairs and fine finishes with a clear scope and thoughtful scheduling.</p>
+          <div class="partner-tags" aria-label="Partnership services"><span>Pre-listing refreshes</span><span>Rental turnovers</span><span>Remodel finishing</span></div>
+        </div>
+        <a class="button button-gold" href="mailto:info@seacolpaintingllc.com?subject=SEACOL%20Trade%20Partnership%20Inquiry">Discuss a Partnership</a>
+      </div>
+    </section>
+
     <section class="section estimate" id="estimate">
       <div class="container estimate-grid">
         <div>
@@ -212,6 +234,7 @@
           <div class="contact-lines"><a href="tel:+12065732474">Call (206) 573-2474</a><a href="sms:+12065732474">Text SEACOL</a><a href="mailto:info@seacolpaintingllc.com">INFO@SEACOLPAINTINGLLC.COM</a></div>
         </div>
         <form id="estimate-form" method="post" action="/api/estimate" aria-describedby="estimate-privacy">
+          <p class="estimate-form-intro full"><strong>Start with a few details.</strong><span>We’ll review your request and follow up about scope and next steps. No payment details are needed.</span></p>
           <fieldset id="estimate-fields" class="estimate-fields full">
           <legend class="visually-hidden">Request a free painting estimate</legend>
           <label><span>Name</span><input name="name" autocomplete="name" minlength="2" maxlength="100" required /></label>
