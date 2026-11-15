@@ -86,6 +86,8 @@
 .gallery-estimate-callout strong { display: block; font-family: Georgia, serif; font-size: 23px; font-weight: 500; line-height: 1.2; }
 .gallery-estimate-callout p { color: #cad6de; margin: 7px 0 0; font-size: 14px; line-height: 1.6; }
 .gallery-estimate-callout .button { flex: 0 0 auto; white-space: nowrap; }
+.gallery-estimate-actions { display: grid; gap: 12px; }
+.gallery-estimate-actions .button { text-align: center; white-space: normal; }
 
 @media (max-width: 850px) {
   .hero-reassurance { font-size: 12px; margin-top: 12px; }

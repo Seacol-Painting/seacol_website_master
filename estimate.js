@@ -10,6 +10,22 @@
   const another = document.querySelector('#estimate-another');
   const fallback = document.querySelector('#request-options');
   const copyStatus = document.querySelector('#copy-status');
+  // Gallery links carry only a public service key. Apply it once to an empty
+  // select; restored values and the visitor's later edits always take priority.
+  const projectKeys = new Map([
+    ['interior', 'Interior Painting'],
+    ['exterior', 'Exterior Painting'],
+    ['cabinets', 'Cabinet Refinishing'],
+    ['commercial', 'Commercial Painting'],
+    ['wood-restoration', 'Deck / Wood Restoration'],
+  ]);
+  const projectParams = new URLSearchParams(window.location?.search || '').getAll('project');
+  const suggestedProject = projectParams.length === 1 ? projectKeys.get(projectParams[0]) : undefined;
+  const project = form.querySelector('[name="project"]');
+  if (suggestedProject && project && !project.value &&
+      Array.from(project.options).some(option => option.value === suggestedProject && !option.disabled)) {
+    project.value = suggestedProject;
+  }
   let pending = false;
   let accepted = false;
   let lastPayload = '';
