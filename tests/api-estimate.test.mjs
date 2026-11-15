@@ -154,6 +154,37 @@ test('honeypot and unsupported fields are rejected without a false success', asy
   }
 });
 
+test('all six existing project categories remain accepted without gallery metadata', async () => {
+  for (const project of ['Interior Painting', 'Exterior Painting', 'Cabinet Refinishing',
+    'Commercial Painting', 'Deck / Wood Restoration', 'Other']) {
+    const h = harness(), input = payload({ project });
+    assert.equal((await h.handler(request(input))).status, 201, project);
+    assert.equal(h.store.entries.get(`estimates/${input.submissionId}.json`).value.form.project, project);
+    assert.equal(h.notices.length, 1);
+  }
+});
+
+test('URL keys and tampered categories cannot bypass the server project allowlist', async () => {
+  for (const project of ['', 'interior', 'exterior', 'cabinets', 'commercial', 'wood-restoration',
+    'Spray Finishes', 'Woodwork', '__proto__', '<script>alert(1)</script>', 'Exterior Painting\u0000',
+    ['Exterior Painting'], { value: 'Exterior Painting' }, null]) {
+    const h = harness();
+    const result = await h.handler(request(payload({ project })));
+    assert.equal(result.status, 422, JSON.stringify(project));
+    assert.ok((await result.json()).fields.project);
+    assert.equal(h.store.entries.size, 0);
+    assert.equal(h.notices.length, 0);
+  }
+});
+
+test('Color Chart text and a gallery-selected category preserve the existing POST contract', async () => {
+  const h = harness(), input = payload({ project: 'Cabinet Refinishing',
+    details: 'Color Chart selections\nCabinet 1: Sherwin-Williams | Alabaster | SW7008 | #EDEAE0' });
+  assert.equal((await h.handler(request(input))).status, 201);
+  assert.equal(h.store.entries.get(`estimates/${input.submissionId}.json`).value.form.details, input.details);
+  assert.equal((await h.handler(request(payload({ projectKey: 'cabinets' })))).status, 400);
+});
+
 test('five new submissions per IP/hour are allowed; duplicates are exempt and the next hour resets', async () => {
   const h = harness(), first = payload(), sixth = payload();
   for (const input of [first, ...Array.from({ length: 4 }, () => payload())]) assert.equal((await h.handler(request(input))).status, 201);

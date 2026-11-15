@@ -12,8 +12,8 @@ const sample = {
   details: 'Kitchen & trim + café\nTwo rooms; "gold" accents?', website: '', consent: 'on',
 };
 
-function fixture({ valid = true, present = true } = {}) {
-  const values = { ...sample };
+function fixture({ valid = true, present = true, search = '', initial = {}, projectOptions } = {}) {
+  const values = { ...sample, ...initial };
   const requests = [];
   const events = [];
   const timers = new Map();
@@ -64,6 +64,15 @@ function fixture({ valid = true, present = true } = {}) {
   submit.disabled = true;
   status.hidden = colorLab.hidden = another.hidden = fallback.hidden = true;
   const inputs = new Map(Object.keys(values).map((name) => [name, element(name)]));
+  for (const [name, input] of inputs) {
+    Object.defineProperty(input, 'value', { get: () => values[name], set: value => { values[name] = value; } });
+  }
+  const projectMarkup = fs.readFileSync(path.join(__dirname, '../index.html'), 'utf8')
+    .match(/<select name="project"[^>]*>([\s\S]*?)<\/select>/)[1];
+  inputs.get('project').options = projectOptions ?? Array.from(projectMarkup.matchAll(/<option(?: value="([^"]*)")?>([^<]*)<\/option>/g),
+    match => ({ value: match[1] ?? match[2], disabled: false }));
+  inputs.get('details').maxLength = 4000;
+  form.elements = { namedItem: name => inputs.get(name) };
   form.reportValidity = () => valid;
   form.querySelector = (selector) => inputs.get(selector.match(/^\[name="([^\"]+)"\]$/)?.[1]) || null;
   form.reset = () => {
@@ -78,7 +87,7 @@ function fixture({ valid = true, present = true } = {}) {
   document.querySelector = (selector) => selector === '#estimate-form' && !present ? null : nodes.get(selector) || null;
   document.querySelectorAll = () => [];
   document.dispatchEvent = (event) => { events.push(event); return true; };
-  const window = { innerWidth: 390, scrollY: 0, addEventListener() {} };
+  const window = { innerWidth: 390, scrollY: 0, location: { search }, addEventListener() {} };
 
   class FormDataSnapshot {
     constructor(target) {
@@ -91,7 +100,7 @@ function fixture({ valid = true, present = true } = {}) {
   }
 
   const context = vm.createContext({
-    document, window, console, URL, AbortController, TypeError,
+    document, window, console, URL, URLSearchParams, AbortController, TypeError,
     FormData: FormDataSnapshot,
     CustomEvent: class { constructor(type, options = {}) { this.type = type; this.detail = options.detail; } },
     crypto: { randomUUID() { uuidCount += 1; return `00000000-0000-4000-8000-${String(uuidCount).padStart(12, '0')}`; } },
@@ -159,6 +168,80 @@ test('missing form is harmless and invalid form never starts a request', async (
   assert.equal(f.requests.length, 0);
   assert.equal(f.uuidCount, 0);
   assert.equal(f.timers.size, 0);
+});
+
+test('gallery service keys select the existing form values without changing other fields', () => {
+  for (const [key, expected] of [
+    ['interior', 'Interior Painting'], ['exterior', 'Exterior Painting'],
+    ['cabinets', 'Cabinet Refinishing'], ['commercial', 'Commercial Painting'],
+    ['wood-restoration', 'Deck / Wood Restoration'],
+  ]) {
+    const f = fixture({ search: `?project=${key}`, initial: { project: '' } });
+    assert.deepEqual(f.values, { ...sample, project: expected });
+    assert.equal(f.requests.length, 0, 'Prefill must never submit a request');
+    assert.equal(f.events.length, 0, 'Prefill is not a conversion');
+  }
+});
+
+test('missing, unknown, malformed and repeated project parameters leave the form blank', () => {
+  for (const search of ['', '?colors=SW7008', '?project=', '?project=Other', '?project=Exterior%20Painting',
+    '?project=__proto__', '?project=constructor', '?project=%3Cscript%3E', '?project=%E0%A4%A',
+    '?project=EXTERIOR', '?project=exterior%00', '?project=exterior&project=interior',
+    '?project=interior&project=interior', '?project=unknown&project=interior']) {
+    const f = fixture({ search, initial: { project: '', details: '' } });
+    assert.equal(f.values.project, '', search);
+    assert.equal(f.requests.length, 0);
+  }
+});
+
+test('unavailable or disabled form options are never selected', () => {
+  for (const projectOptions of [[], [{ value: 'Exterior Painting', disabled: true }]]) {
+    assert.equal(fixture({ search: '?project=exterior', initial: { project: '' }, projectOptions }).values.project, '');
+  }
+});
+
+test('restored and manually changed selections win; retries send the actual selected service', async () => {
+  const restored = fixture({ search: '?project=exterior' });
+  assert.equal(restored.values.project, sample.project);
+  const f = fixture({ search: '?project=exterior', initial: { project: '' } });
+  await f.edit('project', 'Interior Painting');
+  const first = f.send();
+  assert.equal(f.requests[0].payload.project, 'Interior Painting');
+  assert.equal('colors' in f.requests[0].payload, false);
+  f.requests[0].fail(); await first;
+  const retry = f.send();
+  assert.deepEqual(f.requests[1].payload, f.requests[0].payload);
+  f.requests[1].respond(201, { ok: true, reference: 'SC-GALLERY' }); await retry;
+  await f.anotherRequest();
+  assert.equal(f.values.project, '', 'A new request must not reuse stale gallery context');
+});
+
+test('the project parameter coexists with Color Chart notes without rewriting the URL', () => {
+  const search = '?colors=' + encodeURIComponent('Wall 1: Sherwin-Williams | Alabaster | SW7008 | #EDEAE0') + '&project=interior';
+  const f = fixture({ search, initial: { project: '', details: 'My own project notes' } });
+  assert.equal(f.values.project, 'Interior Painting');
+  assert.equal(f.values.details, 'My own project notes');
+});
+
+test('all nine gallery callouts use only intentional public categories; mixed galleries stay neutral', () => {
+  const expected = {
+    'gallery-interiors.html': ['interior'], 'gallery-exteriors.html': ['exterior', 'wood-restoration'],
+    'gallery-cabinets.html': ['cabinets'], 'gallery-commercial.html': ['commercial'],
+    'gallery-custom.html': [null], 'gallery-process.html': [null], 'gallery-repairs.html': [null],
+    'gallery-woodwork.html': [null], 'gallery.html': [null],
+  };
+  for (const [filename, keys] of Object.entries(expected)) {
+    const source = fs.readFileSync(path.join(__dirname, '..', filename), 'utf8');
+    const callout = source.split('<div class="gallery-estimate-callout">')[1].split('</section>')[0];
+    const urls = Array.from(callout.matchAll(/href="([^"]+)"/g), match => new URL(match[1], 'https://seacolpaintingllc.com'));
+    assert.deepEqual(urls.map(url => url.searchParams.get('project')), keys, filename);
+    for (const url of urls) {
+      assert.equal(url.origin, 'https://seacolpaintingllc.com');
+      assert.equal(url.pathname, '/');
+      assert.equal(url.hash, '#estimate');
+      assert.deepEqual([...url.searchParams.keys()], url.search ? ['project'] : []);
+    }
+  }
 });
 
 test('a double submit while pending sends one request and locks the fields', async () => {

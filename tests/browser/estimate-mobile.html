@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SEACOL gallery estimate regression tests</title>
+  <style>
+    body { margin: 24px; font: 16px/1.5 system-ui; background: #f3f0e8; color: #122b3e; }
+    button { padding: 12px 20px; font: inherit; cursor: pointer; }
+    iframe { display: block; border: 2px solid #122b3e; background: white; margin-top: 20px; }
+    .pass { color: #146239; } .fail { color: #b22222; }
+    #summary { font-weight: 700; } li { margin: 5px 0; }
+  </style>
+  <script src="estimate-mobile.js" defer></script>
+</head>
+<body>
+  <h1>Gallery → estimate: browser regressions</h1>
+  <p>Runs real pages at 320 × 568, 390 × 844, 412 × 915 and 844 × 390 CSS pixels.
+    Uses synthetic data and intercepts estimate submissions inside the test frame.</p>
+  <p>Add <code>?colorChart=1</code> when testing a checkout that includes PR #19.</p>
+  <button id="run" type="button">Run automated browser tests</button>
+  <p id="summary" role="status">Ready. Serve this file from the site's test preview, never production.</p>
+  <ol id="results"></ol>
+  <iframe id="site" title="SEACOL site under test" width="390" height="844"></iframe>
+</body>
+</html>
