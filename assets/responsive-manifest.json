@@ -2042,37 +2042,37 @@
       "source": "assets/projects/exterior-shutters-entry.jpg",
       "sourceWidth": 1200,
       "sourceHeight": 569,
-      "sourceBytes": 191262,
-      "sourceSha256": "73f035546712bdd05e86cce71101adf28e952c79b3d77085daf73506ca7dd6d8",
+      "sourceBytes": 188170,
+      "sourceSha256": "5bcca9a862577f0d53d2eee366fbbe5657c6bc362096922621a48915303a2bed",
       "kind": "raster",
       "pages": [
         "gallery-exteriors.html"
       ],
       "variants": [
         {
-          "src": "assets/projects/responsive/exterior-shutters-entry-26f9b5c194-480.webp",
+          "src": "assets/projects/responsive/exterior-shutters-entry-0557e225e9-480.webp",
           "width": 480,
           "height": 228,
-          "bytes": 33294,
-          "sha256": "dcbcbe14d5a7ca234ac0c61932ef1833739b51cb3358482baca223113a17f7e7",
+          "bytes": 33214,
+          "sha256": "2ec7b016c9fdf8e0d4538757ef736a17fb077690681042201743ebd6d91c8a1b",
           "encoding": "webp",
           "quality": 86
         },
         {
-          "src": "assets/projects/responsive/exterior-shutters-entry-26f9b5c194-960.webp",
+          "src": "assets/projects/responsive/exterior-shutters-entry-0557e225e9-960.webp",
           "width": 960,
           "height": 455,
-          "bytes": 126878,
-          "sha256": "53ca569ff658fe5e0881913a63a48a4a3c64fa86426431d7940971fee9f6a0f2",
+          "bytes": 126612,
+          "sha256": "e87abc644fcd3145c0f69a5cd9630188f3da642fd3516513053129d835e7f718",
           "encoding": "webp",
           "quality": 86
         },
         {
-          "src": "assets/projects/responsive/exterior-shutters-entry-26f9b5c194-1200.webp",
+          "src": "assets/projects/responsive/exterior-shutters-entry-0557e225e9-1200.webp",
           "width": 1200,
           "height": 569,
-          "bytes": 182556,
-          "sha256": "0ac1a9b86b5b26443964b746c8584e0544029b30efddadd28181c01547ede2de",
+          "bytes": 182532,
+          "sha256": "bbe6062d12d9127513f6ac2a3e986674b7fcf85dc40f96fdb58a4157e823579e",
           "encoding": "webp",
           "quality": 82
         }
@@ -7390,10 +7390,10 @@
           "source": "assets/projects/exterior-shutters-entry.jpg",
           "role": "gallery-photo-grid",
           "sizes": "(max-width: 380px) calc(100vw - 32px), (max-width: 700px) calc(100vw - 36px), (max-width: 716px) calc(50vw - 29px), (max-width: 850px) 329px, (max-width: 1220px) calc(50vw - 35px), 575px",
-          "src": "assets/projects/responsive/exterior-shutters-entry-26f9b5c194-1200.webp",
+          "src": "assets/projects/responsive/exterior-shutters-entry-0557e225e9-1200.webp",
           "width": 1200,
           "height": 569,
-          "srcset": "assets/projects/responsive/exterior-shutters-entry-26f9b5c194-480.webp 480w, assets/projects/responsive/exterior-shutters-entry-26f9b5c194-960.webp 960w, assets/projects/responsive/exterior-shutters-entry-26f9b5c194-1200.webp 1200w",
+          "srcset": "assets/projects/responsive/exterior-shutters-entry-0557e225e9-480.webp 480w, assets/projects/responsive/exterior-shutters-entry-0557e225e9-960.webp 960w, assets/projects/responsive/exterior-shutters-entry-0557e225e9-1200.webp 1200w",
           "loading": "lazy",
           "decoding": "async"
         },
@@ -7497,9 +7497,9 @@
           "decoding": "async"
         }
       ],
-      "originalUniquePhotoBytes": 6952114,
-      "mobile1xPhotoBytes": 1245274,
-      "mobile2xPhotoBytes": 4431498
+      "originalUniquePhotoBytes": 6949022,
+      "mobile1xPhotoBytes": 1245194,
+      "mobile2xPhotoBytes": 4431232
     },
     "gallery-interiors.html": {
       "images": [
@@ -8442,8 +8442,8 @@
       "height": 630,
       "bytes": 145240,
       "sha256": "45347660b27d3c29018c98fca4f73290fbc6b0324e89626632135d61135aa9c2",
-      "title": "Cabinet Refinishing | SEACOL PAINTING LLC",
-      "description": "Explore real SEACOL kitchen, vanity and built-in cabinet refinishing projects with interactive before-and-after comparisons.",
+      "title": "Cabinet Refinishing Projects | SEACOL Seattle",
+      "description": "Explore SEACOL kitchen, vanity and built-in cabinet refinishing projects with before-and-after photos. Detailed painting and spray finishes in Seattle.",
       "alt": "White kitchen cabinets after SEACOL refinishing",
       "url": "https://seacolpaintingllc.com/gallery-cabinets"
     },
@@ -8455,8 +8455,8 @@
       "height": 630,
       "bytes": 94338,
       "sha256": "a78e1a472124b6e904b0b02b72752a740d157952cde78e8ae77778b7ebfd6321",
-      "title": "Interior Painting | SEACOL PAINTING LLC",
-      "description": "Explore real SEACOL interior painting projects, accent walls, fireplaces, wainscoting and full-room transformations.",
+      "title": "Interior Painting Projects in Seattle | SEACOL PAINTING",
+      "description": "Explore real SEACOL interior painting projects: walls, trim, accent walls and room transformations. Professional painting throughout Seattle and King County.",
       "alt": "Interior walls and white wainscoting after SEACOL painting",
       "url": "https://seacolpaintingllc.com/gallery-interiors"
     },
@@ -8468,8 +8468,8 @@
       "height": 630,
       "bytes": 337945,
       "sha256": "20d01c4d1432e51d09ccf4fb03f05627a07e4eadbc64b3675e87756563c734a5",
-      "title": "Exterior & Wood Restoration | SEACOL PAINTING LLC",
-      "description": "Explore SEACOL exterior painting, deck staining, fence painting, door restoration and wood finishing projects.",
+      "title": "Exterior Painting & Wood Restoration | SEACOL Seattle",
+      "description": "See SEACOL exterior painting, deck and fence staining, door restoration and wood finishing projects. Explore our work serving Seattle and King County.",
       "alt": "Exterior siding project in Issaquah by SEACOL",
       "url": "https://seacolpaintingllc.com/gallery-exteriors"
     },
