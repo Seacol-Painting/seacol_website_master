@@ -3,6 +3,12 @@
   'use strict';
   const form = document.querySelector('#estimate-form');
   if (!form) return;
+  const selection = window.location?.search && new URLSearchParams(window.location.search).get('colors');
+  if (selection) {
+    const details = form.elements.namedItem('details');
+    const notes = 'Color Chart selections\n' + selection;
+    if (!details.value && notes.length <= details.maxLength) details.value = notes;
+  }
   const fields = document.querySelector('#estimate-fields');
   const submit = document.querySelector('#estimate-submit');
   const status = document.querySelector('#estimate-status');
